@@ -86,7 +86,7 @@
 
     /* PALCOSCENICO */
     #stage-workspace{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 16px;overflow:hidden;gap:10px;min-width:0}
-    #canvas-container{position:relative;max-height:calc(100% - 86px);max-width:100%;aspect-ratio:1040/527;display:flex;border-radius:26px;border:6px solid #fff;box-shadow:0 8px 0 rgba(39,38,74,.14);overflow:hidden;background:var(--ink)}
+    #canvas-container{position:relative;max-height:calc(100% - 160px);max-width:100%;aspect-ratio:1040/527;display:flex;border-radius:26px;border:6px solid #fff;box-shadow:0 8px 0 rgba(39,38,74,.14);overflow:hidden;background:var(--ink)}
     #canvas-container:has(#status-badge.show){border-color:var(--red);box-shadow:0 0 0 6px rgba(239,68,68,.3)}
     canvas#stage{width:100%;height:100%;display:block;touch-action:none}
     #status-badge{position:absolute;top:16px;left:16px;background:var(--red);color:#fff;padding:8px 18px;border-radius:30px;font-size:1.2rem;font-weight:700;display:none;align-items:center;gap:10px;z-index:10}
@@ -259,6 +259,42 @@
     #lang-menu button .ico{visibility:hidden;width:1.4rem;height:1.4rem;stroke-width:6}
     #lang-menu button.on{background:var(--blue-l);color:var(--blue-d)}
     #lang-menu button.on .ico{visibility:visible}
+  
+    /* ===== EFFETTI SONORI, GIRATO, RITAGLIO, TRANSIZIONI ===== */
+    :root{--pink:#EC4899;--pink-d:#C42E7C;--pink-l:#FDE4F1}
+    [data-c=sfx]{--cat:var(--pink);--cat-d:var(--pink-d);--cat-l:var(--pink-l)}
+    #sfx-bar{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:64px;flex-shrink:0;background:var(--pink-l);border:3px solid var(--pink);border-radius:34px;padding:0 12px;overflow:hidden}
+    .sfx-title{display:flex;align-items:center;gap:6px;font-weight:700;color:var(--pink-d);font-size:1rem;flex-shrink:0;padding-right:4px}
+    .sfx-title .ico{width:1.5rem;height:1.5rem}
+    .sfx-btn{min-height:52px;min-width:64px;border:0;border-radius:20px;background:#fff;color:var(--pink-d);font-weight:700;font-size:.72rem;line-height:1.05;padding:0 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer;box-shadow:0 3px 0 var(--pink);font-family:inherit;flex-shrink:0;touch-action:manipulation}
+    .sfx-btn .ico{width:1.75rem;height:1.75rem;color:var(--pink)}
+    .sfx-btn:active,.sfx-btn.hit{transform:translateY(2px);box-shadow:0 1px 0 var(--pink);background:var(--pink);color:#fff}
+    .sfx-btn:active .ico,.sfx-btn.hit .ico{color:#fff}
+    @media (max-width:1500px),(max-height:760px){.sfx-title span{display:none}}
+    #rec-timer{font-variant-numeric:tabular-nums;background:rgba(255,255,255,.22);border-radius:14px;padding:0 8px}
+    #total-time{position:sticky;left:0;z-index:12;flex-shrink:0;display:flex;align-items:center;gap:8px;background:#fff;border:3px solid var(--blue);border-radius:20px;padding:6px 14px;color:var(--blue-d);font-weight:700;margin-right:4px;box-shadow:8px 0 8px -4px var(--blue-l)}
+    #total-time .ico{width:1.7rem;height:1.7rem}
+    #total-time .tt-l{font-size:.85rem;display:block;line-height:1}
+    #total-time b{font-size:1.4rem;display:block;line-height:1.1;font-variant-numeric:tabular-nums}
+    .scene-dur{position:absolute;bottom:30px;left:4px;background:var(--blue);color:#fff;border-radius:10px;padding:1px 7px;font-size:.85rem;font-weight:700;z-index:3;font-variant-numeric:tabular-nums}
+    .flow-arrow[title]{cursor:pointer}
+    #export-bar,#export-time,#export-sub{display:none}
+    #export-overlay.movie{position:fixed;z-index:3000;gap:14px;padding:24px}
+    #export-overlay.movie #export-bar{display:block;width:min(520px,80vw);height:18px;border-radius:12px;background:rgba(255,255,255,.18);overflow:hidden}
+    #export-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--yellow),var(--orange));border-radius:12px;transition:width .25s linear}
+    #export-overlay.movie #export-time{display:block;color:#fff;font-weight:700;font-size:1.2rem;font-variant-numeric:tabular-nums}
+    #export-overlay.movie #export-sub{display:block;color:#d8d8ee;font-size:1.05rem;text-align:center;max-width:80vw}
+    .trans-row{display:flex;gap:10px}
+    .trans-chip{flex:1;min-height:76px;border:3px solid var(--line);background:#fff;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:1rem;font-weight:700;color:var(--ink);cursor:pointer;font-family:inherit}
+    .trans-chip .ico{width:2rem;height:2rem;color:var(--blue)}
+    .trans-chip.on{border-color:var(--blue);background:var(--blue-l);color:var(--blue-d)}
+    #bgcrop-canvas{display:block;width:min(100%,calc((100vh - 340px)*1.78));aspect-ratio:760/427;margin:0 auto;border:4px dashed var(--green);border-radius:18px;background:#fff;touch-action:none;cursor:grab}
+    .bgcrop-tools{display:flex;align-items:center;gap:10px}
+    .bgcrop-tools button{min-height:48px;padding:0 16px;font-size:1rem;flex-shrink:0}
+    .bgcrop-tools .btn-secondary{border:3px solid var(--green);background:var(--green-l);color:var(--green-d)}
+    .bgcrop-tools input[type=range]{flex:1;min-height:40px;padding:0;border:0;accent-color:var(--green)}
+    #movie-video{width:100%;max-height:52vh;border-radius:16px;background:#000}
+    #movie-info{font-weight:700;color:var(--ink);text-align:center;font-size:1.15rem}
   </style>
 </head>
 <body>
@@ -274,7 +310,7 @@
 </filter></defs><style>.t{fill:currentColor;fill-opacity:.38;stroke:none}.f{fill:currentColor;stroke:none}
 .ico{filter:url(#f3d);stroke-width:4.5}
 .ico[style*="font-size"]{}
-</style><symbol id="i-clap" viewBox="0 0 48 48"><path class="t" d="M6 21h36v19a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3z"/><path d="M6 21h36v19a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3z" /><path class="t" d="M6 21l-2-9 36-6 2 9z"/><path d="M6 21l-2-9 36-6 2 9z" /><path d="M14 15l4 5M24 13.5l4 5M34 12l4 5" stroke-width="3"/></symbol><symbol id="i-book" viewBox="0 0 48 48"><path class="t" d="M24 11c-4-3-10-4-17-4v28c7 0 13 1 17 4 4-3 10-4 17-4V7c-7 0-13 1-17 4z"/><path d="M24 11c-4-3-10-4-17-4v28c7 0 13 1 17 4 4-3 10-4 17-4V7c-7 0-13 1-17 4z" /><path d="M24 11v28"/></symbol><symbol id="i-team" viewBox="0 0 48 48"><circle class="t" cx="18" cy="16" r="6"/><circle cx="18" cy="16" r="6"/><circle class="t" cx="33" cy="19" r="5"/><circle cx="33" cy="19" r="5"/><path d="M6 40c0-7 5-12 12-12s12 5 12 12"/><path d="M31 29c6 0 11 3 11 10"/></symbol><symbol id="i-trophy" viewBox="0 0 48 48"><path class="t" d="M14 8h20v12a10 10 0 0 1-20 0z"/><path d="M14 8h20v12a10 10 0 0 1-20 0z" /><path d="M14 12H7v3a7 7 0 0 0 7 7M34 12h7v3a7 7 0 0 1-7 7M24 30v8M16 42h16"/></symbol><symbol id="i-bg" viewBox="0 0 48 48"><rect class="t" x="6" y="9" width="36" height="30" rx="6"/><rect x="6" y="9" width="36" height="30" rx="6"/><circle class="f" cx="17" cy="20" r="3.5"/><path d="M10 34l9-9 7 7 5-5 7 7"/></symbol><symbol id="i-char" viewBox="0 0 48 48"><circle class="t" cx="24" cy="15" r="9"/><circle cx="24" cy="15" r="9"/><path d="M8 43c0-9 7-14 16-14s16 5 16 14" /><path d="M8 43c0-9 7-14 16-14s16 5 16 14"/><circle class="f" cx="20.5" cy="14" r="1.8"/><circle class="f" cx="27.5" cy="14" r="1.8"/><path d="M20 18.5q4 3 8 0" stroke-width="3"/></symbol><symbol id="i-music" viewBox="0 0 48 48"><path d="M18 36V12l22-5v24"/><circle class="t" cx="12" cy="36" r="6"/><circle cx="12" cy="36" r="6"/><circle class="t" cx="34" cy="31" r="6"/><circle cx="34" cy="31" r="6"/></symbol><symbol id="i-camera" viewBox="0 0 48 48"><rect class="t" x="6" y="14" width="36" height="26" rx="6"/><rect x="6" y="14" width="36" height="26" rx="6"/><path d="M17 14l2.5-5h9L31 14"/><circle class="t" cx="24" cy="27" r="7"/><circle cx="24" cy="27" r="7"/></symbol><symbol id="i-folder" viewBox="0 0 48 48"><path class="t" d="M6 14a4 4 0 0 1 4-4h9l5 6h14a4 4 0 0 1 4 4v16a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4z"/><path d="M6 14a4 4 0 0 1 4-4h9l5 6h14a4 4 0 0 1 4 4v16a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4z" /></symbol><symbol id="i-scissors" viewBox="0 0 48 48"><circle class="t" cx="12" cy="36" r="6"/><circle cx="12" cy="36" r="6"/><circle class="t" cx="36" cy="36" r="6"/><circle cx="36" cy="36" r="6"/><path d="M16 31L38 8M32 31L10 8"/></symbol><symbol id="i-mic" viewBox="0 0 48 48"><rect class="t" x="17" y="5" width="14" height="25" rx="7"/><rect x="17" y="5" width="14" height="25" rx="7"/><path d="M10 23v1a14 14 0 0 0 28 0v-1M24 38v6M17 44h14"/></symbol><symbol id="i-play" viewBox="0 0 48 48"><path d="M16 9v30l24-15z" fill="currentColor"/></symbol><symbol id="i-stop" viewBox="0 0 48 48"><rect x="11" y="11" width="26" height="26" rx="5" fill="currentColor" stroke="none"/></symbol><symbol id="i-pause" viewBox="0 0 48 48"><rect x="12" y="9" width="8" height="30" rx="3" fill="currentColor" stroke="none"/><rect x="28" y="9" width="8" height="30" rx="3" fill="currentColor" stroke="none"/></symbol><symbol id="i-redo" viewBox="0 0 48 48"><path d="M39 24a15 15 0 1 1 -4.4 -10.6"/><path d="M36 6v9h-9"/></symbol><symbol id="i-undo" viewBox="0 0 48 48"><path d="M14 18h15a9 9 0 0 1 0 18H18"/><path d="M20 10l-8 8 8 8"/></symbol><symbol id="i-resize" viewBox="0 0 48 48"><path d="M28 8h12v12"/><path d="M40 8L26 22"/><path d="M20 40H8V28"/><path d="M8 40l14-14"/></symbol><symbol id="i-trash" viewBox="0 0 48 48"><path class="t" d="M12 12h24l-2 28a3 3 0 0 1-3 3H17a3 3 0 0 1-3-3z"/><path d="M12 12h24l-2 28a3 3 0 0 1-3 3H17a3 3 0 0 1-3-3z" /><path d="M8 12h32M19 12V8h10v4M20 21v14M28 21v14"/></symbol><symbol id="i-x" viewBox="0 0 48 48"><path d="M12 12l24 24M36 12L12 36"/></symbol><symbol id="i-check" viewBox="0 0 48 48"><path d="M10 25l9 9 19-20"/></symbol><symbol id="i-plus" viewBox="0 0 48 48"><path d="M24 10v28M10 24h28"/></symbol><symbol id="i-arrow" viewBox="0 0 48 48"><path d="M8 24h30M27 12l12 12-12 12"/></symbol><symbol id="i-star" viewBox="0 0 48 48"><path d="M24 6l5.4 11.6 12.6 1.5-9.3 8.7 2.5 12.5L24 34l-11.2 6.3 2.5-12.5L6 19.1l12.6-1.5z" fill="currentColor"/></symbol><symbol id="i-vol-low" viewBox="0 0 48 48"><path class="t" d="M8 19h7l10-8v26l-10-8H8z"/><path d="M8 19h7l10-8v26l-10-8H8z" /><path d="M31 18a8 8 0 0 1 0 12"/></symbol><symbol id="i-vol-high" viewBox="0 0 48 48"><path class="t" d="M8 19h7l10-8v26l-10-8H8z"/><path d="M8 19h7l10-8v26l-10-8H8z" /><path d="M31 18a8 8 0 0 1 0 12M36 12a15 15 0 0 1 0 24"/></symbol><symbol id="i-mute" viewBox="0 0 48 48"><path class="t" d="M8 19h7l10-8v26l-10-8H8z"/><path d="M8 19h7l10-8v26l-10-8H8z" /><path d="M32 19l10 10M42 19L32 29"/></symbol><symbol id="i-pin" viewBox="0 0 48 48"><path d="M10 34L20 12l18 8-6 18z" stroke-width="2.5" stroke-dasharray="4 5"/><circle class="f" cx="10" cy="34" r="4.5"/><circle class="f" cx="20" cy="12" r="4.5"/><circle class="f" cx="38" cy="20" r="4.5"/><circle class="f" cx="32" cy="38" r="4.5"/></symbol><symbol id="i-save" viewBox="0 0 48 48"><path class="t" d="M6 28h36v10a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3z"/><path d="M6 28h36v10a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3z" /><path d="M24 6v20M15 17l9 9 9-9"/></symbol><symbol id="i-globe" viewBox="0 0 48 48"><circle class="t" cx="24" cy="24" r="18"/><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c-9 9-9 27 0 36M24 6c9 9 9 27 0 36"/></symbol><symbol id="i-help" viewBox="0 0 48 48"><circle class="t" cx="24" cy="24" r="18"/><circle cx="24" cy="24" r="18"/><path d="M18.5 19a5.5 5.5 0 1 1 8.5 4.6c-2 1.3-3 2.4-3 4.4"/><circle class="f" cx="24" cy="35" r="2.4"/></symbol><symbol id="i-heart" viewBox="0 0 48 48"><path d="M24 41C10 31 5 24 5 16.500 5 11 9 7 14 7c4 0 7.500 2.300 10 6 2.500-3.700 6-6 10-6 5 0 9 4 9 9.500C43 24 38 31 24 41z" fill="currentColor"/></symbol><symbol id="i-expand" viewBox="0 0 48 48"><path d="M8 18V8h10M30 8h10v10M40 30v10H30M18 40H8V30"/></symbol><symbol id="i-shrink" viewBox="0 0 48 48"><path d="M18 8v10H8M40 18H30V8M30 40V30h10M8 30h10v10"/></symbol><symbol id="i-pencil" viewBox="0 0 48 48"><path class="t" d="M9 39l2.5-9.5L33 8a4.2 4.2 0 0 1 6 0l1 1a4.2 4.2 0 0 1 0 6L18.5 36.5z"/><path d="M9 39l2.5-9.5L33 8a4.2 4.2 0 0 1 6 0l1 1a4.2 4.2 0 0 1 0 6L18.5 36.5z" /><path d="M28 13l7 7"/></symbol></svg>
+</style><symbol id="i-clap" viewBox="0 0 48 48"><path class="t" d="M6 21h36v19a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3z"/><path d="M6 21h36v19a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3z" /><path class="t" d="M6 21l-2-9 36-6 2 9z"/><path d="M6 21l-2-9 36-6 2 9z" /><path d="M14 15l4 5M24 13.5l4 5M34 12l4 5" stroke-width="3"/></symbol><symbol id="i-book" viewBox="0 0 48 48"><path class="t" d="M24 11c-4-3-10-4-17-4v28c7 0 13 1 17 4 4-3 10-4 17-4V7c-7 0-13 1-17 4z"/><path d="M24 11c-4-3-10-4-17-4v28c7 0 13 1 17 4 4-3 10-4 17-4V7c-7 0-13 1-17 4z" /><path d="M24 11v28"/></symbol><symbol id="i-team" viewBox="0 0 48 48"><circle class="t" cx="18" cy="16" r="6"/><circle cx="18" cy="16" r="6"/><circle class="t" cx="33" cy="19" r="5"/><circle cx="33" cy="19" r="5"/><path d="M6 40c0-7 5-12 12-12s12 5 12 12"/><path d="M31 29c6 0 11 3 11 10"/></symbol><symbol id="i-trophy" viewBox="0 0 48 48"><path class="t" d="M14 8h20v12a10 10 0 0 1-20 0z"/><path d="M14 8h20v12a10 10 0 0 1-20 0z" /><path d="M14 12H7v3a7 7 0 0 0 7 7M34 12h7v3a7 7 0 0 1-7 7M24 30v8M16 42h16"/></symbol><symbol id="i-bg" viewBox="0 0 48 48"><rect class="t" x="6" y="9" width="36" height="30" rx="6"/><rect x="6" y="9" width="36" height="30" rx="6"/><circle class="f" cx="17" cy="20" r="3.5"/><path d="M10 34l9-9 7 7 5-5 7 7"/></symbol><symbol id="i-char" viewBox="0 0 48 48"><circle class="t" cx="24" cy="15" r="9"/><circle cx="24" cy="15" r="9"/><path d="M8 43c0-9 7-14 16-14s16 5 16 14" /><path d="M8 43c0-9 7-14 16-14s16 5 16 14"/><circle class="f" cx="20.5" cy="14" r="1.8"/><circle class="f" cx="27.5" cy="14" r="1.8"/><path d="M20 18.5q4 3 8 0" stroke-width="3"/></symbol><symbol id="i-music" viewBox="0 0 48 48"><path d="M18 36V12l22-5v24"/><circle class="t" cx="12" cy="36" r="6"/><circle cx="12" cy="36" r="6"/><circle class="t" cx="34" cy="31" r="6"/><circle cx="34" cy="31" r="6"/></symbol><symbol id="i-camera" viewBox="0 0 48 48"><rect class="t" x="6" y="14" width="36" height="26" rx="6"/><rect x="6" y="14" width="36" height="26" rx="6"/><path d="M17 14l2.5-5h9L31 14"/><circle class="t" cx="24" cy="27" r="7"/><circle cx="24" cy="27" r="7"/></symbol><symbol id="i-folder" viewBox="0 0 48 48"><path class="t" d="M6 14a4 4 0 0 1 4-4h9l5 6h14a4 4 0 0 1 4 4v16a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4z"/><path d="M6 14a4 4 0 0 1 4-4h9l5 6h14a4 4 0 0 1 4 4v16a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4z" /></symbol><symbol id="i-scissors" viewBox="0 0 48 48"><circle class="t" cx="12" cy="36" r="6"/><circle cx="12" cy="36" r="6"/><circle class="t" cx="36" cy="36" r="6"/><circle cx="36" cy="36" r="6"/><path d="M16 31L38 8M32 31L10 8"/></symbol><symbol id="i-mic" viewBox="0 0 48 48"><rect class="t" x="17" y="5" width="14" height="25" rx="7"/><rect x="17" y="5" width="14" height="25" rx="7"/><path d="M10 23v1a14 14 0 0 0 28 0v-1M24 38v6M17 44h14"/></symbol><symbol id="i-play" viewBox="0 0 48 48"><path d="M16 9v30l24-15z" fill="currentColor"/></symbol><symbol id="i-stop" viewBox="0 0 48 48"><rect x="11" y="11" width="26" height="26" rx="5" fill="currentColor" stroke="none"/></symbol><symbol id="i-pause" viewBox="0 0 48 48"><rect x="12" y="9" width="8" height="30" rx="3" fill="currentColor" stroke="none"/><rect x="28" y="9" width="8" height="30" rx="3" fill="currentColor" stroke="none"/></symbol><symbol id="i-redo" viewBox="0 0 48 48"><path d="M39 24a15 15 0 1 1 -4.4 -10.6"/><path d="M36 6v9h-9"/></symbol><symbol id="i-undo" viewBox="0 0 48 48"><path d="M14 18h15a9 9 0 0 1 0 18H18"/><path d="M20 10l-8 8 8 8"/></symbol><symbol id="i-resize" viewBox="0 0 48 48"><path d="M28 8h12v12"/><path d="M40 8L26 22"/><path d="M20 40H8V28"/><path d="M8 40l14-14"/></symbol><symbol id="i-trash" viewBox="0 0 48 48"><path class="t" d="M12 12h24l-2 28a3 3 0 0 1-3 3H17a3 3 0 0 1-3-3z"/><path d="M12 12h24l-2 28a3 3 0 0 1-3 3H17a3 3 0 0 1-3-3z" /><path d="M8 12h32M19 12V8h10v4M20 21v14M28 21v14"/></symbol><symbol id="i-x" viewBox="0 0 48 48"><path d="M12 12l24 24M36 12L12 36"/></symbol><symbol id="i-check" viewBox="0 0 48 48"><path d="M10 25l9 9 19-20"/></symbol><symbol id="i-plus" viewBox="0 0 48 48"><path d="M24 10v28M10 24h28"/></symbol><symbol id="i-arrow" viewBox="0 0 48 48"><path d="M8 24h30M27 12l12 12-12 12"/></symbol><symbol id="i-star" viewBox="0 0 48 48"><path d="M24 6l5.4 11.6 12.6 1.5-9.3 8.7 2.5 12.5L24 34l-11.2 6.3 2.5-12.5L6 19.1l12.6-1.5z" fill="currentColor"/></symbol><symbol id="i-vol-low" viewBox="0 0 48 48"><path class="t" d="M8 19h7l10-8v26l-10-8H8z"/><path d="M8 19h7l10-8v26l-10-8H8z" /><path d="M31 18a8 8 0 0 1 0 12"/></symbol><symbol id="i-vol-high" viewBox="0 0 48 48"><path class="t" d="M8 19h7l10-8v26l-10-8H8z"/><path d="M8 19h7l10-8v26l-10-8H8z" /><path d="M31 18a8 8 0 0 1 0 12M36 12a15 15 0 0 1 0 24"/></symbol><symbol id="i-mute" viewBox="0 0 48 48"><path class="t" d="M8 19h7l10-8v26l-10-8H8z"/><path d="M8 19h7l10-8v26l-10-8H8z" /><path d="M32 19l10 10M42 19L32 29"/></symbol><symbol id="i-pin" viewBox="0 0 48 48"><path d="M10 34L20 12l18 8-6 18z" stroke-width="2.5" stroke-dasharray="4 5"/><circle class="f" cx="10" cy="34" r="4.5"/><circle class="f" cx="20" cy="12" r="4.5"/><circle class="f" cx="38" cy="20" r="4.5"/><circle class="f" cx="32" cy="38" r="4.5"/></symbol><symbol id="i-save" viewBox="0 0 48 48"><path class="t" d="M6 28h36v10a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3z"/><path d="M6 28h36v10a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3z" /><path d="M24 6v20M15 17l9 9 9-9"/></symbol><symbol id="i-globe" viewBox="0 0 48 48"><circle class="t" cx="24" cy="24" r="18"/><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c-9 9-9 27 0 36M24 6c9 9 9 27 0 36"/></symbol><symbol id="i-help" viewBox="0 0 48 48"><circle class="t" cx="24" cy="24" r="18"/><circle cx="24" cy="24" r="18"/><path d="M18.5 19a5.5 5.5 0 1 1 8.5 4.6c-2 1.3-3 2.4-3 4.4"/><circle class="f" cx="24" cy="35" r="2.4"/></symbol><symbol id="i-heart" viewBox="0 0 48 48"><path d="M24 41C10 31 5 24 5 16.500 5 11 9 7 14 7c4 0 7.500 2.300 10 6 2.500-3.700 6-6 10-6 5 0 9 4 9 9.500C43 24 38 31 24 41z" fill="currentColor"/></symbol><symbol id="i-expand" viewBox="0 0 48 48"><path d="M8 18V8h10M30 8h10v10M40 30v10H30M18 40H8V30"/></symbol><symbol id="i-shrink" viewBox="0 0 48 48"><path d="M18 8v10H8M40 18H30V8M30 40V30h10M8 30h10v10"/></symbol><symbol id="i-pencil" viewBox="0 0 48 48"><path class="t" d="M9 39l2.5-9.5L33 8a4.2 4.2 0 0 1 6 0l1 1a4.2 4.2 0 0 1 0 6L18.5 36.5z"/><path d="M9 39l2.5-9.5L33 8a4.2 4.2 0 0 1 6 0l1 1a4.2 4.2 0 0 1 0 6L18.5 36.5z" /><path d="M28 13l7 7"/></symbol><symbol id="i-sfx" viewBox="0 0 48 48"><circle class="t" cx="24" cy="24" r="8"/><circle cx="24" cy="24" r="8"/><path d="M24 4v8M24 36v8M4 24h8M36 24h8M10 10l5 5M33 33l5 5M38 10l-5 5M15 33l-5 5"/></symbol><symbol id="i-sfx-boing" viewBox="0 0 48 48"><path d="M24 5v6M24 37v6"/><path d="M24 11l12 4-24 6 24 6-24 6 12 4"/><circle class="t" cx="24" cy="43" r="0.1"/></symbol><symbol id="i-sfx-clap" viewBox="0 0 48 48"><g transform="translate(3 4.500) scale(.88)"><g transform="translate(-1 1) rotate(-12 13 45)"><path class="t" d="M7 45V20A6.5 6.5 0 0 1 20 20V25Q26 22.500 26.500 28Q27 34 20 37V45z"/><path d="M7 45V20A6.5 6.5 0 0 1 20 20V25Q26 22.500 26.500 28Q27 34 20 37V45z"/></g><g transform="translate(1 1) rotate(12 35 45)"><path class="t" d="M41 45V20A6.5 6.5 0 0 0 28 20V25Q22 22.500 21.500 28Q21 34 28 37V45z"/><path d="M41 45V20A6.5 6.5 0 0 0 28 20V25Q22 22.500 21.500 28Q21 34 28 37V45z"/></g></g><path d="M24 3v5M13 6l2.500 4.500M35 6l-2.500 4.500" stroke-width="3"/></symbol><symbol id="i-sfx-pop" viewBox="0 0 48 48"><circle class="t" cx="24" cy="26" r="9"/><circle cx="24" cy="26" r="9"/><path d="M24 5v6M9 11l4 4M39 11l-4 4M4 27h6M38 27h6"/></symbol><symbol id="i-sfx-ding" viewBox="0 0 48 48"><path class="t" d="M12 34c2-3 3-7 3-12a9 9 0 0 1 18 0c0 5 1 9 3 12z"/><path d="M12 34c2-3 3-7 3-12a9 9 0 0 1 18 0c0 5 1 9 3 12zM20 39a4 4 0 0 0 8 0M24 7v6"/></symbol><symbol id="i-sfx-whoosh" viewBox="0 0 48 48"><path d="M5 17h24a6 6 0 1 0-6-6M5 26h34a6 6 0 1 1-6 6M5 35h17"/></symbol><symbol id="i-sfx-steps" viewBox="0 0 48 48"><ellipse class="t" cx="16" cy="17" rx="6" ry="9"/><ellipse cx="16" cy="17" rx="6" ry="9"/><ellipse class="t" cx="32" cy="32" rx="6" ry="9"/><ellipse cx="32" cy="32" rx="6" ry="9"/><path d="M12 31h8M28 16h8" stroke-width="3"/></symbol><symbol id="i-sfx-thunder" viewBox="0 0 48 48"><path class="t" d="M28 4L10 27h12l-4 17 20-25H26z"/><path d="M28 4L10 27h12l-4 17 20-25H26z" stroke-linejoin="round"/></symbol><symbol id="i-clock" viewBox="0 0 48 48"><circle class="t" cx="24" cy="24" r="18"/><circle cx="24" cy="24" r="18"/><path d="M24 13v11l7 5"/></symbol><symbol id="i-crop" viewBox="0 0 48 48"><path d="M14 4v30h30M4 14h30v30"/></symbol><symbol id="i-trans-none" viewBox="0 0 48 48"><rect class="t" x="5" y="13" width="15" height="22" rx="4"/><rect x="5" y="13" width="15" height="22" rx="4"/><rect class="t" x="28" y="13" width="15" height="22" rx="4"/><rect x="28" y="13" width="15" height="22" rx="4"/></symbol><symbol id="i-trans-fade" viewBox="0 0 48 48"><rect class="t" x="5" y="12" width="26" height="24" rx="4"/><rect x="5" y="12" width="26" height="24" rx="4"/><rect class="t" x="17" y="12" width="26" height="24" rx="4"/><rect x="17" y="12" width="26" height="24" rx="4"/></symbol><symbol id="i-trans-slide" viewBox="0 0 48 48"><rect class="t" x="4" y="12" width="20" height="24" rx="4"/><rect x="4" y="12" width="20" height="24" rx="4"/><path d="M29 24h14M37 17l7 7-7 7"/></symbol><symbol id="i-sfx-applause" viewBox="0 0 48 48"><g transform="translate(5 12) scale(.78)"><g transform="rotate(-12 13 45)"><path class="t" d="M7 45V20A6.5 6.5 0 0 1 20 20V25Q26 22.500 26.500 28Q27 34 20 37V45z"/><path d="M7 45V20A6.5 6.5 0 0 1 20 20V25Q26 22.500 26.500 28Q27 34 20 37V45z"/></g><g transform="rotate(12 35 45)"><path class="t" d="M41 45V20A6.5 6.5 0 0 0 28 20V25Q22 22.500 21.500 28Q21 34 28 37V45z"/><path d="M41 45V20A6.5 6.5 0 0 0 28 20V25Q22 22.500 21.500 28Q21 34 28 37V45z"/></g></g><path class="f" d="M8 2.5Q8 9 14.5 9Q8 9 8 15.5Q8 9 1.5 9Q8 9 8 2.5z"/><path class="f" d="M40 1.5Q40 8 46.5 8Q40 8 40 14.5Q40 8 33.5 8Q40 8 40 1.5z"/><path class="f" d="M24 1Q24 5 28 5Q24 5 24 9Q24 5 20 5Q24 5 24 1z"/></symbol></svg>
   <header id="top-bar">
     <div class="brand"><img class="brand-logo" alt="Animatoon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgLTMwIDczNCAxNjAiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iQW5pbWF0b29uIj48dGl0bGU+QW5pbWF0b29uPC90aXRsZT4KPGRlZnM+PGcgaWQ9IkwiPjxjaXJjbGUgY3g9IjQzLjAiIGN5PSI3NCIgcj0iMjYiLz48cGF0aCBkPSJNNjkuMCA0OFYxMDAiLz48cGF0aCBkPSJNMTAxLjAgNDhWMTAwTTEwMS4wIDcyUTEwMS4wIDQ4IDEyNS4wIDQ4UTE0OS4wIDQ4IDE0OS4wIDcyVjEwMCIvPjxwYXRoIGQ9Ik0xODEuMCA0OFYxMDAiLz48cGF0aCBkPSJNMjEzLjAgNDhWMTAwTTIxMy4wIDcyUTIxMy4wIDQ4IDIzNS4wIDQ4UTI1Ny4wIDQ4IDI1Ny4wIDcyVjEwME0yNTcuMCA3MlEyNTcuMCA0OCAyNzkuMCA0OFEzMDEuMCA0OCAzMDEuMCA3MlYxMDAiLz48Y2lyY2xlIGN4PSIzNTkuMCIgY3k9Ijc0IiByPSIyNiIvPjxwYXRoIGQ9Ik0zODUuMCA0OFYxMDAiLz48cGF0aCBkPSJNNDMxIDIyVjgwUTQzMSAxMDAgNDUxIDEwME00MTcgNDhINDUzIi8+PGNpcmNsZSBjeD0iNTExLjAiIGN5PSI3NCIgcj0iMjYiLz48Y2lyY2xlIGN4PSI1OTUuMCIgY3k9Ijc0IiByPSIyNiIvPjxwYXRoIGQ9Ik02NTMuMCA0OFYxMDBNNjUzLjAgNzJRNjUzLjAgNDggNjc3LjAgNDhRNzAxLjAgNDggNzAxLjAgNzJWMTAwIi8+PC9nPgo8bGluZWFyR3JhZGllbnQgaWQ9Imd3IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAiIHkxPSI0MCIgeDI9IjAiIHkyPSIxMDgiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzRGN0RFOCIvPjxzdG9wIG9mZnNldD0iLjUiIHN0b3AtY29sb3I9IiMyQjUwQjgiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMxRTNBOEEiLz48L2xpbmVhckdyYWRpZW50Pgo8ZmlsdGVyIGlkPSJibCIgeD0iLTUlIiB5PSItMzAlIiB3aWR0aD0iMTEwJSIgaGVpZ2h0PSIxNzAlIj48ZmVHYXVzc2lhbkJsdXIgc3RkRGV2aWF0aW9uPSI1Ii8+PC9maWx0ZXI+PC9kZWZzPgo8ZyBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPgo8dXNlIGhyZWY9IiNMIiBzdHJva2U9IiMxRTNBOEEiIHN0cm9rZS13aWR0aD0iMTQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDUgMTcpIiBvcGFjaXR5PSIuMjgiIGZpbHRlcj0idXJsKCNibCkiLz4KPHVzZSBocmVmPSIjTCIgc3Ryb2tlPSIjMTIyNTVFIiBzdHJva2Utd2lkdGg9IjE0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwIDkpIi8+PHVzZSBocmVmPSIjTCIgc3Ryb2tlPSIjMTIyNTVFIiBzdHJva2Utd2lkdGg9IjE0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwIDcuNSkiLz48dXNlIGhyZWY9IiNMIiBzdHJva2U9IiMxMjI1NUUiIHN0cm9rZS13aWR0aD0iMTQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAgNikiLz48dXNlIGhyZWY9IiNMIiBzdHJva2U9IiMxMjI1NUUiIHN0cm9rZS13aWR0aD0iMTQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAgNC41KSIvPjx1c2UgaHJlZj0iI0wiIHN0cm9rZT0iIzEyMjU1RSIgc3Ryb2tlLXdpZHRoPSIxNCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAzKSIvPjx1c2UgaHJlZj0iI0wiIHN0cm9rZT0iIzEyMjU1RSIgc3Ryb2tlLXdpZHRoPSIxNCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAxLjUpIi8+Cjx1c2UgaHJlZj0iI0wiIHN0cm9rZT0idXJsKCNndykiIHN0cm9rZS13aWR0aD0iMTQiLz4KPHVzZSBocmVmPSIjTCIgc3Ryb2tlPSIjQjRDQkZGIiBzdHJva2Utb3BhY2l0eT0iLjY1IiBzdHJva2Utd2lkdGg9IjMuNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIuNCAtMi44KSIvPgo8L2c+CjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE1NS4wIC0yNS4wKSBzY2FsZSgwLjUpIj48cGF0aCBkPSJNNTIgNkM3OCA2IDk0IDI2IDk0IDUyQzk0IDgwIDc0IDk4IDU0IDEwNEM0NCAxMDcgMzQgMTA4IDI2IDExNEMzMCAxMDQgMzIgOTggMjggOTJDMTYgODIgMTAgNjggMTAgNTJDMTAgMjYgMjYgNiA1MiA2WiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCA4KSIgZmlsbD0iI0MzQ0ZFOCIgc3Ryb2tlPSIjQzNDRkU4IiBzdHJva2Utd2lkdGg9IjE0IiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTUyIDZDNzggNiA5NCAyNiA5NCA1MkM5NCA4MCA3NCA5OCA1NCAxMDRDNDQgMTA3IDM0IDEwOCAyNiAxMTRDMzAgMTA0IDMyIDk4IDI4IDkyQzE2IDgyIDEwIDY4IDEwIDUyQzEwIDI2IDI2IDYgNTIgNloiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAgNikiIGZpbGw9IiNDM0NGRTgiIHN0cm9rZT0iI0MzQ0ZFOCIgc3Ryb2tlLXdpZHRoPSIxNCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxwYXRoIGQ9Ik01MiA2Qzc4IDYgOTQgMjYgOTQgNTJDOTQgODAgNzQgOTggNTQgMTA0QzQ0IDEwNyAzNCAxMDggMjYgMTE0QzMwIDEwNCAzMiA5OCAyOCA5MkMxNiA4MiAxMCA2OCAxMCA1MkMxMCAyNiAyNiA2IDUyIDZaIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwIDQpIiBmaWxsPSIjQzNDRkU4IiBzdHJva2U9IiNDM0NGRTgiIHN0cm9rZS13aWR0aD0iMTQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNNTIgNkM3OCA2IDk0IDI2IDk0IDUyQzk0IDgwIDc0IDk4IDU0IDEwNEM0NCAxMDcgMzQgMTA4IDI2IDExNEMzMCAxMDQgMzIgOTggMjggOTJDMTYgODIgMTAgNjggMTAgNTJDMTAgMjYgMjYgNiA1MiA2WiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAyKSIgZmlsbD0iI0MzQ0ZFOCIgc3Ryb2tlPSIjQzNDRkU4IiBzdHJva2Utd2lkdGg9IjE0IiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnTDMiIHgxPSIwLjE1IiB5MT0iMCIgeDI9IjAuODUiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNGRkU5N0EiLz48c3RvcCBvZmZzZXQ9IjAuNTUiIHN0b3AtY29sb3I9IiNGRkM5M0MiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNGRjlBMkUiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz4KPHBhdGggZD0iTTUyIDZDNzggNiA5NCAyNiA5NCA1MkM5NCA4MCA3NCA5OCA1NCAxMDRDNDQgMTA3IDM0IDEwOCAyNiAxMTRDMzAgMTA0IDMyIDk4IDI4IDkyQzE2IDgyIDEwIDY4IDEwIDUyQzEwIDI2IDI2IDYgNTIgNloiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDQgNykiIGZpbGw9IiMyNzI2NEEiIG9wYWNpdHk9Ii4xNiIvPgo8cGF0aCBkPSJNNTIgNkM3OCA2IDk0IDI2IDk0IDUyQzk0IDgwIDc0IDk4IDU0IDEwNEM0NCAxMDcgMzQgMTA4IDI2IDExNEMzMCAxMDQgMzIgOTggMjggOTJDMTYgODIgMTAgNjggMTAgNTJDMTAgMjYgMjYgNiA1MiA2WiIgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjE0IiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CjxwYXRoIGQ9Ik01MiA2Qzc4IDYgOTQgMjYgOTQgNTJDOTQgODAgNzQgOTggNTQgMTA0QzQ0IDEwNyAzNCAxMDggMjYgMTE0QzMwIDEwNCAzMiA5OCAyOCA5MkMxNiA4MiAxMCA2OCAxMCA1MkMxMCAyNiAyNiA2IDUyIDZaIiBmaWxsPSJ1cmwoI2dMMykiLz4KPHBhdGggZD0iTTMwIDMwQzM0IDE4IDQ0IDEyIDU0IDEyQzQyIDE2IDM2IDI2IDM0IDQwQzMwIDQwIDI4IDM2IDMwIDMwWiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjU1Ii8+CjxlbGxpcHNlIGN4PSIzOCIgY3k9IjUyIiByeD0iNyIgcnk9IjguNCIgZmlsbD0iIzI3MjY0QSIvPjxlbGxpcHNlIGN4PSI2NiIgY3k9IjUyIiByeD0iNyIgcnk9IjguNCIgZmlsbD0iIzI3MjY0QSIvPgo8Y2lyY2xlIGN4PSI0MC40IiBjeT0iNDkiIHI9IjIuNiIgZmlsbD0iI2ZmZiIvPjxjaXJjbGUgY3g9IjY4LjQiIGN5PSI0OSIgcj0iMi42IiBmaWxsPSIjZmZmIi8+CjxjaXJjbGUgY3g9IjI3IiBjeT0iNjgiIHI9IjYuNSIgZmlsbD0iI0ZGNkY4RSIgb3BhY2l0eT0iLjU1Ii8+PGNpcmNsZSBjeD0iNzciIGN5PSI2OCIgcj0iNi41IiBmaWxsPSIjRkY2RjhFIiBvcGFjaXR5PSIuNTUiLz4KPHBhdGggZD0iTTQzIDY2UTUyIDc3IDYxIDY2IiBmaWxsPSJub25lIiBzdHJva2U9IiMyNzI2NEEiIHN0cm9rZS13aWR0aD0iNC42IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPHBhdGggZD0iTTk5IC00UTEwMSA2IDExMSA4UTEwMSAxMCA5OSAyMFE5NyAxMCA4NyA4UTk3IDYgOTkgLTRaIiBmaWxsPSIjRkZDOTNDIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMyIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgcGFpbnQtb3JkZXI9InN0cm9rZSIvPjwvZz48L3N2Zz4="></div>
     <div class="header-actions">
@@ -327,13 +363,28 @@
 
     <main id="stage-workspace">
       <div id="canvas-container">
-        <div id="status-badge"><span class="dot"></span> Si registra!</div>
+        <div id="status-badge"><span class="dot"></span> Si registra! <span id="rec-timer">0:00</span></div>
         <div id="stage-music-badge" class="no-music"><span><svg class="ico" aria-hidden="true"><use href="#i-mute"/></svg></span> <span id="stage-music-badge-text">Nessuna musica</span></div>
         <div id="export-overlay">
           <div class="spinner"></div>
           <div id="export-status-text">Montaggio del film in corso...</div>
+          <div id="export-bar"><i></i></div>
+          <div id="export-time"></div>
+          <div id="export-sub">Tieni lo schermo acceso e non cambiare pagina</div>
         </div>
         <canvas id="stage" width="1040" height="527"></canvas>
+      </div>
+
+      <div id="sfx-bar" data-c="sfx" role="toolbar">
+        <span class="sfx-title"><svg class="ico" aria-hidden="true"><use href="#i-sfx"/></svg><span>Effetti</span></span>
+        <button class="sfx-btn" title="Boing" onpointerdown="sfxTap('boing',event)" onkeydown="if(event.key==='Enter'||event.key===' ')sfxTap('boing',event)"><svg class="ico" aria-hidden="true"><use href="#i-sfx-boing"/></svg><span>Boing</span></button>
+        <button class="sfx-btn" title="Clap" onpointerdown="sfxTap('clap',event)" onkeydown="if(event.key==='Enter'||event.key===' ')sfxTap('clap',event)"><svg class="ico" aria-hidden="true"><use href="#i-sfx-clap"/></svg><span>Clap</span></button>
+        <button class="sfx-btn" title="Applauso" onpointerdown="sfxTap('applauso',event)" onkeydown="if(event.key==='Enter'||event.key===' ')sfxTap('applauso',event)"><svg class="ico" aria-hidden="true"><use href="#i-sfx-applause"/></svg><span>Applauso</span></button>
+        <button class="sfx-btn" title="Pop" onpointerdown="sfxTap('pop',event)" onkeydown="if(event.key==='Enter'||event.key===' ')sfxTap('pop',event)"><svg class="ico" aria-hidden="true"><use href="#i-sfx-pop"/></svg><span>Pop</span></button>
+        <button class="sfx-btn" title="Ding" onpointerdown="sfxTap('ding',event)" onkeydown="if(event.key==='Enter'||event.key===' ')sfxTap('ding',event)"><svg class="ico" aria-hidden="true"><use href="#i-sfx-ding"/></svg><span>Ding</span></button>
+        <button class="sfx-btn" title="Whoosh" onpointerdown="sfxTap('whoosh',event)" onkeydown="if(event.key==='Enter'||event.key===' ')sfxTap('whoosh',event)"><svg class="ico" aria-hidden="true"><use href="#i-sfx-whoosh"/></svg><span>Whoosh</span></button>
+        <button class="sfx-btn" title="Passi" onpointerdown="sfxTap('passi',event)" onkeydown="if(event.key==='Enter'||event.key===' ')sfxTap('passi',event)"><svg class="ico" aria-hidden="true"><use href="#i-sfx-steps"/></svg><span>Passi</span></button>
+        <button class="sfx-btn" title="Tuono" onpointerdown="sfxTap('tuono',event)" onkeydown="if(event.key==='Enter'||event.key===' ')sfxTap('tuono',event)"><svg class="ico" aria-hidden="true"><use href="#i-sfx-thunder"/></svg><span>Tuono</span></button>
       </div>
 
       <div id="stage-control-strip">
@@ -353,12 +404,32 @@
   </div>
 
   <footer id="storyboard-footer">
+    <div id="total-time"><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg><div><span class="tt-l">Girato</span><b id="total-time-val">0:00</b></div></div>
     <div id="acts-flow-container"></div>
     <div class="flow-arrow"><svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></div>
     <div class="scene-add-card" onclick="openAddSceneModal()" title="Aggiungi una nuova scena">+</div>
   </footer>
   <div id="credit-bar"><span>made with</span><svg class="ico" aria-hidden="true"><use href="#i-heart"/></svg><span>by Giuseppe Schiuma</span><span class="sep">·</span><a id="cc-link" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.it" target="_blank" rel="license noopener" title="Licenza Creative Commons Attribuzione - Non commerciale - Condividi allo stesso modo 4.0">CC BY-NC-SA 4.0</a></div>
 
+
+  <div id="bgcrop-modal" class="modal-overlay"><div class="modal-box" data-c="bg" style="max-width:880px">
+    <h3 style="color: var(--green-d);"><svg class="ico" aria-hidden="true"><use href="#i-crop"/></svg> Adatta lo sfondo</h3>
+    <p class="ar-hint" style="margin:0;text-align:center">Trascina e allarga con due dita per scegliere la parte da usare</p>
+    <canvas id="bgcrop-canvas" width="760" height="427"></canvas>
+    <div class="bgcrop-tools">
+      <button class="btn-secondary" onclick="bcFill()">Riempi</button>
+      <button class="btn-secondary" onclick="bcFit()">Intera</button>
+      <input type="range" id="bgcrop-zoom" min="0" max="1000" value="0" oninput="bcZoomSlider(this.value)">
+    </div>
+    <div class="modal-actions"><button class="btn-secondary" onclick="closeBgCrop()">Annulla</button><button class="btn-primary green" onclick="confirmBgCrop()">Usa come sfondo</button></div>
+  </div></div>
+
+  <div id="movie-modal" class="modal-overlay"><div class="modal-box" data-c="film" style="max-width:760px">
+    <h3 style="color: var(--yellow-d);"><svg class="ico" aria-hidden="true"><use href="#i-trophy"/></svg> Il film è pronto!</h3>
+    <video id="movie-video" controls playsinline></video>
+    <div id="movie-info"></div>
+    <div class="modal-actions"><button class="btn-secondary" onclick="closeMovieModal()">Chiudi</button><button class="btn-primary" style="background:var(--yellow);color:var(--ink);box-shadow:0 5px 0 var(--yellow-d)" onclick="saveMovieFile()"><svg class="ico" aria-hidden="true" style="width:1.4rem;height:1.4rem;vertical-align:-4px"><use href="#i-save"/></svg> Salva il film</button></div>
+  </div></div>
 
   <input type="file" id="open-project-input" accept=".animatoon,.storystudio,.json,application/json" onchange="loadProjectFile(event)">
   <div id="toast"></div>
@@ -367,6 +438,12 @@
     <h3 style="color: var(--blue-d);"><svg class="ico" aria-hidden="true"><use href="#i-book"/></svg> Quante parti ha la nostra storia?</h3>
     <button class="btn-primary" style="min-height:84px;font-size:1.25rem;text-align:left;line-height:1.3;display:block" onclick="applyNarrativePreset('3')">3 parti<br><small style="font-weight:500">Inizio · Svolgimento · Conclusione</small></button>
     <button class="btn-primary" style="min-height:84px;font-size:1.25rem;text-align:left;line-height:1.3;display:block" onclick="applyNarrativePreset('5')">5 parti<br><small style="font-weight:500">Inizio · Problema · Sfida · Colpo di scena · Finale</small></button>
+    <div style="border-top:3px dashed var(--line);padding-top:12px"><label>Come cambiano le scene?</label>
+      <div class="trans-row" style="margin-top:8px">
+        <button class="trans-chip" data-t="none" onclick="setTransition('none')"><svg class="ico" aria-hidden="true"><use href="#i-trans-none"/></svg><span>Nessuna</span></button>
+        <button class="trans-chip" data-t="fade" onclick="setTransition('fade')"><svg class="ico" aria-hidden="true"><use href="#i-trans-fade"/></svg><span>Dissolvenza</span></button>
+        <button class="trans-chip" data-t="slide" onclick="setTransition('slide')"><svg class="ico" aria-hidden="true"><use href="#i-trans-slide"/></svg><span>Scorrimento</span></button>
+      </div></div>
     <div class="modal-actions"><button class="btn-secondary" onclick="closePresetModal()">Chiudi</button></div>
   </div></div>
 
@@ -416,7 +493,8 @@
 
   <div id="help-modal" class="modal-overlay" onclick="if(event.target===this)closeHelp()"><div class="modal-box">
     <h3 style="color: var(--blue-d);"><svg class="ico" aria-hidden="true"><use href="#i-help"/></svg> Come funziona</h3>
-    <div class="help-list"><div class="help-step" data-c="bg"><div class="hi"><svg class="ico" aria-hidden="true"><use href="#i-bg"/></svg></div><div><b>Scegli lo sfondo</b><span class="t">Nella scheda verde aggiungi uno sfondo con la foto o con un file.</span></div></div><div class="help-step" data-c="char"><div class="hi"><svg class="ico" aria-hidden="true"><use href="#i-char"/></svg></div><div><b>Crea i personaggi</b><span class="t">Fotografa un disegno e ritaglialo col dito: diventa un personaggio.</span></div></div><div class="help-step" data-c="char"><div class="hi"><svg class="ico" aria-hidden="true"><use href="#i-resize"/></svg></div><div><b>Metti in scena</b><span class="t">Tocca un personaggio per portarlo sul palco. Trascinalo, ruotalo e ingrandiscilo con i cerchi arancioni. Fuori dal riquadro giallo è dietro le quinte.</span></div></div><div class="help-step" data-c="music"><div class="hi"><svg class="ico" aria-hidden="true"><use href="#i-music"/></svg></div><div><b>Aggiungi la musica</b><span class="t">Scegli una musica da un file oppure registrala con il microfono.</span></div></div><div class="help-step" data-c="rec"><div class="hi"><svg class="ico" aria-hidden="true"><use href="#i-mic"/></svg></div><div><b>Registra la scena</b><span class="t">Premi Registra, racconta la storia con la voce e muovi i personaggi.</span></div></div><div class="help-step" data-c="story"><div class="hi"><svg class="ico" aria-hidden="true"><use href="#i-plus"/></svg></div><div><b>Costruisci la storia</b><span class="t">In basso aggiungi altre scene con il +. Trascinale per cambiare l'ordine.</span></div></div><div class="help-step" data-c="film"><div class="hi"><svg class="ico" aria-hidden="true"><use href="#i-trophy"/></svg></div><div><b>Crea il film</b><span class="t">Alla fine premi Salva il film: ottieni il video con titoli di testa, titoli di coda e applausi.</span></div></div><div class="help-step" data-c="file"><div class="hi"><svg class="ico" aria-hidden="true"><use href="#i-save"/></svg></div><div><b>Salva il lavoro</b><span class="t">Con Salva puoi continuare più tardi, con Apri riprendi un lavoro salvato.</span></div></div></div>
+    <div class="help-list"><div class="help-step" data-c="bg"><div class="hi"><svg class="ico" aria-hidden="true"><use href="#i-bg"/></svg></div><div><b>Scegli lo sfondo</b><span class="t">Nella scheda verde aggiungi uno sfondo con la foto o con un file.</span></div></div><div class="help-step" data-c="char"><div class="hi"><svg class="ico" aria-hidden="true"><use href="#i-char"/></svg></div><div><b>Crea i personaggi</b><span class="t">Fotografa un disegno e ritaglialo col dito: diventa un personaggio.</span></div></div><div class="help-step" data-c="char"><div class="hi"><svg class="ico" aria-hidden="true"><use href="#i-resize"/></svg></div><div><b>Metti in scena</b><span class="t">Tocca un personaggio per portarlo sul palco. Trascinalo, ruotalo e ingrandiscilo con i cerchi arancioni. Fuori dal riquadro giallo è dietro le quinte.</span></div></div><div class="help-step" data-c="music"><div class="hi"><svg class="ico" aria-hidden="true"><use href="#i-music"/></svg></div><div><b>Aggiungi la musica</b><span class="t">Scegli una musica da un file oppure registrala con il microfono.</span></div></div><div class="help-step" data-c="rec"><div class="hi"><svg class="ico" aria-hidden="true"><use href="#i-mic"/></svg></div><div><b>Registra la scena</b><span class="t">Premi Registra, racconta la storia con la voce e muovi i personaggi.</span></div></div><div class="help-step" data-c="story"><div class="hi"><svg class="ico" aria-hidden="true"><use href="#i-plus"/></svg></div><div><b>Costruisci la storia</b><span class="t">In basso aggiungi altre scene con il +. Trascinale per cambiare l'ordine.</span></div></div><div class="help-step" data-c="film"><div class="hi"><svg class="ico" aria-hidden="true"><use href="#i-trophy"/></svg></div><div><b>Crea il film</b><span class="t">Alla fine premi Salva il film: ottieni il video con titoli di testa, titoli di coda e applausi.</span></div></div><div class="help-step" data-c="file"><div class="hi"><svg class="ico" aria-hidden="true"><use href="#i-save"/></svg></div><div><b>Salva il lavoro</b><span class="t">Con Salva puoi continuare più tardi, con Apri riprendi un lavoro salvato.</span></div></div><div class="help-step" data-c="sfx"><div class="hi"><svg class="ico" aria-hidden="true"><use href="#i-sfx"/></svg></div><div><b>Effetti sonori</b><span class="t">Mentre registri tocca i bottoni rosa: boing, clap, applausi... Il suono finisce nel film!</span></div></div><div class="help-step" data-c="story"><div class="hi"><svg class="ico" aria-hidden="true"><use href="#i-trans-fade"/></svg></div><div><b>Passaggi tra le scene</b><span class="t">Tocca la freccia tra due scene per scegliere come cambiano: nessuno, dissolvenza o scorrimento.</span></div></div>
+    </div>
     <div class="modal-actions"><button class="btn-primary" onclick="closeHelp()">Ho capito!</button></div>
   </div></div>
 
@@ -432,7 +510,7 @@
   <script>
 
 /* ===== LINGUE (it, en, fr, es, de) ===== */
-const I18N = [["La storia", "Story", "Histoire", "Historia", "Geschichte"], ["Titoli e squadra", "Title & crew", "Générique", "Créditos", "Titel & Team"], ["Apri", "Open", "Ouvrir", "Abrir", "Öffnen"], ["lavoro", "project", "projet", "proyecto", "Projekt"], ["Salva", "Save", "Sauver", "Guardar", "Sichern"], ["Salva il film", "Save movie", "Sauver le film", "Guardar película", "Film speichern"], ["Sfondi", "Scenery", "Décors", "Fondos", "Kulissen"], ["Personaggi", "Characters", "Personnages", "Personajes", "Figuren"], ["Musica", "Music", "Musique", "Música", "Musik"], ["Foto", "Photo", "Photo", "Foto", "Foto"], ["File", "File", "Fichier", "Archivo", "Datei"], ["Aggiungi musica", "Add music", "Ajouter musique", "Añadir música", "Musik hinzufügen"], ["Togli la musica", "Remove music", "Retirer la musique", "Quitar la música", "Musik entfernen"], ["Registra", "Record", "Enregistrer", "Grabar", "Aufnehmen"], ["Guarda", "Watch", "Regarder", "Ver", "Ansehen"], ["Rifai", "Redo", "Refaire", "Repetir", "Nochmal"], ["Stop", "Stop", "Stop", "Parar", "Stopp"], ["Togli", "Remove", "Retirer", "Quitar", "Entfernen"], ["Usa", "Use", "Utiliser", "Usar", "Nutzen"], ["Si registra!", "Recording!", "Enregistrement !", "¡Grabando!", "Aufnahme läuft!"], ["Nessuna musica", "No music", "Pas de musique", "Sin música", "Keine Musik"], ["Personaggio", "Character", "Personnage", "Personaje", "Figur"], ["Personaggio {n}", "Character {n}", "Personnage {n}", "Personaje {n}", "Figur {n}"], ["Montaggio del film in corso...", "Making the movie...", "Montage du film en cours...", "Montando la película...", "Film wird zusammengestellt..."], ["Quante parti ha la nostra storia?", "How many parts does our story have?", "Combien de parties a notre histoire ?", "¿Cuántas partes tiene nuestra historia?", "Wie viele Teile hat unsere Geschichte?"], ["3 parti", "3 parts", "3 parties", "3 partes", "3 Teile"], ["5 parti", "5 parts", "5 parties", "5 partes", "5 Teile"], ["Inizio · Svolgimento · Conclusione", "Beginning · Middle · Ending", "Début · Développement · Conclusion", "Inicio · Desarrollo · Desenlace", "Anfang · Handlung · Schluss"], ["Inizio · Problema · Sfida · Colpo di scena · Finale", "Beginning · Problem · Challenge · Twist · Ending", "Début · Problème · Défi · Rebondissement · Fin", "Inicio · Problema · Desafío · Giro · Final", "Anfang · Problem · Hürde · Wendung · Ende"], ["Chiudi", "Close", "Fermer", "Cerrar", "Schließen"], ["Nuova scena", "New scene", "Nouvelle scène", "Nueva escena", "Neue Szene"], ["Come si chiama la scena?", "What is the scene called?", "Comment s'appelle la scène ?", "¿Cómo se llama la escena?", "Wie heißt die Szene?"], ["Dove la metto?", "Where should I put it?", "Où la mettre ?", "¿Dónde la pongo?", "Wohin damit?"], ["In fondo alla storia", "At the end of the story", "À la fin de l'histoire", "Al final de la historia", "Am Ende der Geschichte"], ["Dopo questa scena", "After this scene", "Après cette scène", "Después de esta escena", "Nach dieser Szene"], ["Annulla", "Cancel", "Annuler", "Cancelar", "Abbrechen"], ["Aggiungi", "Add", "Ajouter", "Añadir", "Hinzufügen"], ["Titolo e squadra", "Title & crew", "Titre & équipe", "Título y equipo", "Titel & Team"], ["Titolo del film", "Movie title", "Titre du film", "Título de la película", "Filmtitel"], ["Classe o sezione", "Class or group", "Classe ou groupe", "Clase o grupo", "Klasse oder Gruppe"], ["Regia e montaggio", "Directing & editing", "Réalisation et montage", "Dirección y montaje", "Regie & Schnitt"], ["Storia e sceneggiatura", "Story & script", "Histoire et scénario", "Historia y guion", "Geschichte & Drehbuch"], ["Disegni e animazione", "Drawings & animation", "Dessins et animation", "Dibujos y animación", "Zeichnungen & Animation"], ["Voci e suoni", "Voices & sounds", "Voix et sons", "Voces y sonidos", "Stimmen & Geräusche"], ["Fatto!", "Done!", "Terminé !", "¡Listo!", "Fertig!"], ["Inquadra:", "Frame it:", "Cadre :", "Encuadra:", "Ausschnitt:"], ["Scatta", "Snap", "Prendre", "Capturar", "Foto machen"], ["Puntini", "Dots", "Points", "Puntos", "Punkte"], ["Matita", "Pencil", "Crayon", "Lápiz", "Stift"], ["Indietro", "Back", "Retour", "Atrás", "Zurück"], ["Ricomincia", "Start over", "Recommencer", "Empezar de nuevo", "Neu anfangen"], ["Salva personaggio", "Save character", "Enregistrer le personnage", "Guardar personaje", "Figur speichern"], ["Aggiungi una nuova scena", "Add a new scene", "Ajouter une nouvelle scène", "Añadir una escena nueva", "Neue Szene hinzufügen"], ["Apri un lavoro salvato", "Open a saved project", "Ouvrir un projet enregistré", "Abrir un proyecto guardado", "Gespeichertes Projekt öffnen"], ["Salva il lavoro per riprenderlo dopo", "Save your project to continue later", "Enregistre ton projet pour continuer plus tard", "Guarda tu proyecto para seguir después", "Speichere dein Projekt, um später weiterzumachen"], ["Es. Nel bosco incantato", "E.g. In the enchanted forest", "Ex. Dans la forêt enchantée", "Ej. En el bosque encantado", "z. B. Im Zauberwald"], ["Es. Sezione B, Classe 2ª B", "E.g. Group B, Class 2B", "Ex. Groupe B, classe 2 B", "Ej. Grupo B, clase 2.º B", "z. B. Gruppe B, Klasse 2b"], ["Es. Mario, Luca", "E.g. Mario, Luca", "Ex. Mario, Luca", "Ej. Mario, Luca", "z. B. Mario, Luca"], ["Es. Sofia, Elena", "E.g. Sofia, Elena", "Ex. Sofia, Elena", "Ej. Sofia, Elena", "z. B. Sofia, Elena"], ["Es. Marco, Anna", "E.g. Marco, Anna", "Ex. Marco, Anna", "Ej. Marco, Anna", "z. B. Marco, Anna"], ["Es. Matteo, Chiara", "E.g. Matteo, Chiara", "Ex. Matteo, Chiara", "Ej. Matteo, Chiara", "z. B. Matteo, Chiara"], ["Elimina scena", "Delete scene", "Supprimer la scène", "Eliminar escena", "Szene löschen"], ["Sfondo attivo in questa scena", "Background used in this scene", "Décor utilisé dans cette scène", "Fondo usado en esta escena", "Hintergrund dieser Szene"], ["Tocca per impostare come sfondo", "Tap to use as background", "Touche pour l'utiliser comme décor", "Toca para usarlo de fondo", "Tippen, um als Hintergrund zu nutzen"], ["Tocca per posizionare sul palco", "Tap to place on stage", "Touche pour le placer sur la scène", "Toca para ponerlo en el escenario", "Tippen, um auf die Bühne zu stellen"], ["Rimuovi da questa scena", "Remove from this scene", "Retirer de cette scène", "Quitar de esta escena", "Aus dieser Szene entfernen"], ["Una storia ha bisogno di almeno una scena!", "A story needs at least one scene!", "Une histoire a besoin d'au moins une scène !", "¡Una historia necesita al menos una escena!", "Eine Geschichte braucht mindestens eine Szene!"], ["Se cambi le parti della storia, le registrazioni fatte si cancellano. Vuoi continuare?", "If you change the parts of the story, the recordings you made will be deleted. Do you want to continue?", "Si tu changes les parties de l'histoire, les enregistrements déjà faits seront effacés. Veux-tu continuer ?", "Si cambias las partes de la historia, se borrarán las grabaciones hechas. ¿Quieres continuar?", "Wenn du die Teile der Geschichte änderst, werden die Aufnahmen gelöscht. Möchtest du weitermachen?"], ["Vuoi buttare via la scena \"{n}\"?", "Do you want to throw away the scene \"{n}\"?", "Veux-tu jeter la scène « {n} » ?", "¿Quieres tirar la escena \"{n}\"?", "Möchtest du die Szene „{n}“ wegwerfen?"], ["Vuoi cancellare la registrazione di \"{n}\" e rifarla da capo?", "Do you want to delete the recording of \"{n}\" and do it again?", "Veux-tu effacer l'enregistrement de « {n} » et le refaire depuis le début ?", "¿Quieres borrar la grabación de \"{n}\" y hacerla de nuevo?", "Möchtest du die Aufnahme von „{n}“ löschen und neu aufnehmen?"], ["Questa musica non si apre. Prova con un altro file!", "This music won't open. Try another file!", "Cette musique ne s'ouvre pas. Essaie un autre fichier !", "Esta música no se abre. ¡Prueba con otro archivo!", "Diese Musik lässt sich nicht öffnen. Probier eine andere Datei!"], ["Dietro le quinte: qui nessuno ti vede", "Backstage: nobody can see you here", "Dans les coulisses : ici personne ne te voit", "Entre bastidores: aquí nadie te ve", "Hinter den Kulissen: Hier sieht dich niemand"], ["Inquadra lo sfondo", "Frame the background", "Cadre le décor", "Encuadra el fondo", "Hintergrund aufnehmen"], ["Inquadra il disegno", "Frame the drawing", "Cadre le dessin", "Encuadra el dibujo", "Zeichnung aufnehmen"], ["La fotocamera non parte. Controlla di aver dato il permesso!", "The camera won't start. Check that you gave permission!", "La caméra ne démarre pas. Vérifie que tu as donné l'autorisation !", "La cámara no arranca. ¡Comprueba que diste permiso!", "Die Kamera startet nicht. Prüfe, ob du die Erlaubnis gegeben hast!"], ["Il microfono non parte. Controlla di aver dato il permesso!", "The microphone won't start. Check that you gave permission!", "Le micro ne démarre pas. Vérifie que tu as donné l'autorisation !", "El micrófono no arranca. ¡Comprueba que diste permiso!", "Das Mikrofon startet nicht. Prüfe, ob du die Erlaubnis gegeben hast!"], ["Tocca un puntino alla volta, tutto intorno al disegno", "Tap one dot at a time, all around the drawing", "Touche un point à la fois, tout autour du dessin", "Toca un punto cada vez, alrededor del dibujo", "Tippe nacheinander Punkte rund um die Zeichnung"], ["Disegna il contorno senza staccare il dito", "Draw the outline without lifting your finger", "Dessine le contour sans lever le doigt", "Dibuja el contorno sin levantar el dedo", "Zeichne die Umrisse, ohne den Finger abzusetzen"], ["Metti almeno 3 puntini attorno al disegno!", "Put at least 3 dots around the drawing!", "Mets au moins 3 points autour du dessin !", "¡Pon al menos 3 puntos alrededor del dibujo!", "Setze mindestens 3 Punkte um die Zeichnung!"], ["Come si chiama questo personaggio?", "What is this character called?", "Comment s'appelle ce personnage ?", "¿Cómo se llama este personaje?", "Wie heißt diese Figur?"], ["Prima registra almeno una scena, poi potrai salvare il film!", "First record at least one scene, then you can save the movie!", "Enregistre d'abord au moins une scène, tu pourras ensuite sauver le film !", "¡Primero graba al menos una escena y luego podrás guardar la película!", "Nimm zuerst mindestens eine Szene auf, dann kannst du den Film speichern!"], ["Preparazione del film...", "Getting the movie ready...", "Préparation du film...", "Preparando la película...", "Film wird vorbereitet..."], ["Creazione Titoli Iniziali...", "Making the opening titles...", "Création du générique de début...", "Creando los títulos iniciales...", "Vorspann wird erstellt..."], ["Montaggio Scena {a} di {b}...", "Editing scene {a} of {b}...", "Montage de la scène {a} sur {b}...", "Montando la escena {a} de {b}...", "Szene {a} von {b} wird zusammengestellt..."], ["Titoli di Coda e Applausi...", "Closing credits and applause...", "Générique de fin et applaudissements...", "Créditos finales y aplausos...", "Abspann und Applaus..."], ["Salvataggio file completato!", "File saved!", "Fichier enregistré !", "¡Archivo guardado!", "Datei gespeichert!"], ["Regia: {n}", "Directed by: {n}", "Réalisation : {n}", "Dirección: {n}", "Regie: {n}"], ["STORIA & SCENEGGIATURA", "STORY & SCRIPT", "HISTOIRE & SCÉNARIO", "HISTORIA Y GUION", "GESCHICHTE & DREHBUCH"], ["DISEGNI & ANIMAZIONE", "DRAWINGS & ANIMATION", "DESSINS & ANIMATION", "DIBUJOS Y ANIMACIÓN", "ZEICHNUNGEN & ANIMATION"], ["VOCI, SUONI & MICROFONO", "VOICES, SOUNDS & MICROPHONE", "VOIX, SONS & MICRO", "VOCES, SONIDOS Y MICRÓFONO", "STIMMEN, GERÄUSCHE & MIKROFON"], ["REGIA & MONTAGGIO", "DIRECTING & EDITING", "RÉALISATION & MONTAGE", "DIRECCIÓN Y MONTAJE", "REGIE & SCHNITT"], ["FINE", "THE END", "FIN", "FIN", "ENDE"], ["Sto salvando il lavoro...", "Saving your project...", "J'enregistre ton projet...", "Guardando tu proyecto...", "Projekt wird gespeichert..."], ["Lavoro salvato!", "Project saved!", "Projet enregistré !", "¡Proyecto guardado!", "Projekt gespeichert!"], ["Non riesco a salvare il lavoro. Riprova!", "I can't save the project. Try again!", "Impossible d'enregistrer le projet. Réessaie !", "No puedo guardar el proyecto. ¡Inténtalo otra vez!", "Das Projekt konnte nicht gespeichert werden. Versuch es noch einmal!"], ["Se apri un lavoro salvato, quello che vedi adesso viene sostituito. Vuoi continuare?", "If you open a saved project, what you see now will be replaced. Do you want to continue?", "Si tu ouvres un projet enregistré, ce que tu vois maintenant sera remplacé. Veux-tu continuer ?", "Si abres un proyecto guardado, lo que ves ahora se sustituirá. ¿Quieres continuar?", "Wenn du ein gespeichertes Projekt öffnest, wird das, was du jetzt siehst, ersetzt. Möchtest du weitermachen?"], ["Sto aprendo il lavoro...", "Opening your project...", "J'ouvre ton projet...", "Abriendo tu proyecto...", "Projekt wird geöffnet..."], ["Lavoro aperto!", "Project opened!", "Projet ouvert !", "¡Proyecto abierto!", "Projekt geöffnet!"], ["Questo file non sembra un lavoro di Animatoon. Prova con un altro!", "This file doesn't look like an Animatoon project. Try another one!", "Ce fichier ne semble pas être un projet Animatoon. Essaie-en un autre !", "Este archivo no parece un proyecto de Animatoon. ¡Prueba con otro!", "Diese Datei sieht nicht wie ein Animatoon-Projekt aus. Probier eine andere!"], ["Tocca {a} o {b}<br>per aggiungere uno sfondo", "Tap {a} or {b}<br>to add a background", "Touche {a} ou {b}<br>pour ajouter un décor", "Toca {a} o {b}<br>para añadir un fondo", "Tippe auf {a} oder {b}<br>für einen Hintergrund"], ["Fotografa un disegno,<br>poi ritaglialo col dito", "Photograph a drawing,<br>then cut it out with your finger", "Photographie un dessin,<br>puis découpe-le avec le doigt", "Fotografía un dibujo<br>y recórtalo con el dedo", "Fotografiere eine Zeichnung<br>und schneide sie mit dem Finger aus"], ["Aggiungi una musica<br>con il tasto viola", "Add some music<br>with the purple button", "Ajoute une musique<br>avec le bouton violet", "Añade una música<br>con el botón morado", "Füge Musik hinzu<br>mit dem lila Knopf"], ["1. Inizio", "1. Beginning", "1. Début", "1. Inicio", "1. Anfang"], ["2. Svolgimento", "2. Middle", "2. Développement", "2. Desarrollo", "2. Handlung"], ["3. Conclusione", "3. Ending", "3. Conclusion", "3. Desenlace", "3. Schluss"], ["2. Problema", "2. Problem", "2. Problème", "2. Problema", "2. Problem"], ["3. Sfida", "3. Challenge", "3. Défi", "3. Desafío", "3. Hürde"], ["4. Colpo di Scena", "4. Twist", "4. Rebondissement", "4. Giro", "4. Wendung"], ["5. Finale", "5. Ending", "5. Fin", "5. Final", "5. Ende"], ["Scena {n}", "Scene {n}", "Scène {n}", "Escena {n}", "Szene {n}"], ["La Nostra Storia", "Our Story", "Notre histoire", "Nuestra historia", "Unsere Geschichte"], ["Classe 1ª B", "Class 1B", "Classe 1B", "Clase 1.º B", "Klasse 1b"], ["Regista", "Director", "Réalisateur", "Director", "Regie"], ["Sceneggiatori", "Writers", "Scénaristes", "Guionistas", "Drehbuch"], ["Disegnatori", "Artists", "Dessinateurs", "Dibujantes", "Zeichner"], ["Doppiatori", "Voice actors", "Doubleurs", "Actores de voz", "Sprecher"], ["Aiuto", "Help", "Aide", "Ayuda", "Hilfe"], ["Come funziona", "How it works", "Comment ça marche", "Cómo funciona", "So funktioniert's"], ["Ho capito!", "Got it!", "Compris !", "¡Entendido!", "Verstanden!"], ["Scegli lo sfondo", "Pick a background", "Choisis le décor", "Elige el fondo", "Wähle die Kulisse"], ["Nella scheda verde aggiungi uno sfondo con la foto o con un file.", "In the green tab, add a background with a photo or a file.", "Dans l'onglet vert, ajoute un décor avec une photo ou un fichier.", "En la pestaña verde, añade un fondo con una foto o un archivo.", "Im grünen Reiter fügst du mit einem Foto oder einer Datei eine Kulisse hinzu."], ["Crea i personaggi", "Create characters", "Crée les personnages", "Crea los personajes", "Erstelle Figuren"], ["Fotografa un disegno e ritaglialo col dito: diventa un personaggio.", "Photograph a drawing and cut it out with your finger: it becomes a character.", "Photographie un dessin et découpe-le avec le doigt : il devient un personnage.", "Fotografía un dibujo y recórtalo con el dedo: se convierte en un personaje.", "Fotografiere eine Zeichnung und schneide sie mit dem Finger aus: Sie wird zur Figur."], ["Metti in scena", "Set the stage", "Mets en scène", "Monta la escena", "Bühne einrichten"], ["Tocca un personaggio per portarlo sul palco. Trascinalo, ruotalo e ingrandiscilo con i cerchi arancioni. Fuori dal riquadro giallo è dietro le quinte.", "Tap a character to bring it on stage. Drag, rotate and resize it with the orange circles. Outside the yellow frame is backstage.", "Touche un personnage pour l'amener sur la scène. Déplace-le, tourne-le et agrandis-le avec les cercles orange. En dehors du cadre jaune, ce sont les coulisses.", "Toca un personaje para llevarlo al escenario. Arrástralo, gíralo y agrándalo con los círculos naranjas. Fuera del marco amarillo es entre bastidores.", "Tippe auf eine Figur, um sie auf die Bühne zu holen. Verschiebe, drehe und vergrößere sie mit den orangefarbenen Kreisen. Außerhalb des gelben Rahmens ist hinter den Kulissen."], ["Aggiungi la musica", "Add music", "Ajoute la musique", "Añade música", "Füge Musik hinzu"], ["Scegli una musica da un file oppure registrala con il microfono.", "Pick music from a file or record it with the microphone.", "Choisis une musique dans un fichier ou enregistre-la avec le micro.", "Elige una música de un archivo o grábala con el micrófono.", "Wähle Musik aus einer Datei oder nimm sie mit dem Mikrofon auf."], ["Registra la scena", "Record the scene", "Enregistre la scène", "Graba la escena", "Nimm die Szene auf"], ["Premi Registra, racconta la storia con la voce e muovi i personaggi.", "Press Record, tell the story with your voice and move the characters.", "Appuie sur Enregistrer, raconte l'histoire avec ta voix et déplace les personnages.", "Pulsa Grabar, cuenta la historia con tu voz y mueve a los personajes.", "Drücke Aufnehmen, erzähle die Geschichte mit deiner Stimme und bewege die Figuren."], ["Costruisci la storia", "Build the story", "Construis l'histoire", "Construye la historia", "Baue die Geschichte"], ["In basso aggiungi altre scene con il +. Trascinale per cambiare l'ordine.", "At the bottom, add more scenes with the +. Drag them to change the order.", "En bas, ajoute d'autres scènes avec le +. Fais-les glisser pour changer l'ordre.", "Abajo, añade más escenas con el +. Arrástralas para cambiar el orden.", "Unten fügst du mit dem + weitere Szenen hinzu. Zieh sie, um die Reihenfolge zu ändern."], ["Crea il film", "Make the movie", "Crée le film", "Crea la película", "Mach den Film"], ["Alla fine premi Salva il film: ottieni il video con titoli di testa, titoli di coda e applausi.", "At the end press Save movie: you get the video with opening titles, closing credits and applause.", "À la fin, appuie sur Sauver le film : tu obtiens la vidéo avec générique de début, générique de fin et applaudissements.", "Al final pulsa Guardar película: obtienes el vídeo con títulos iniciales, créditos finales y aplausos.", "Am Ende drückst du Film speichern: Du bekommst das Video mit Vorspann, Abspann und Applaus."], ["Salva il lavoro", "Save your project", "Enregistre ton projet", "Guarda tu proyecto", "Sichere dein Projekt"], ["Con Salva puoi continuare più tardi, con Apri riprendi un lavoro salvato.", "Use Save to continue later and Open to pick up a saved project.", "Avec Sauver, tu continues plus tard ; avec Ouvrir, tu reprends un projet enregistré.", "Con Guardar puedes seguir más tarde; con Abrir retomas un proyecto guardado.", "Mit Sichern machst du später weiter, mit Öffnen holst du ein gespeichertes Projekt zurück."], ["Registra l'audio", "Record audio", "Enregistrer le son", "Grabar audio", "Audio aufnehmen"], ["Tocca il tasto rosso e parla, canta o suona", "Tap the red button and talk, sing or play", "Touche le bouton rouge et parle, chante ou joue", "Toca el botón rojo y habla, canta o toca", "Tippe auf den roten Knopf und sprich, sing oder spiel"], ["Nome", "Name", "Nom", "Nombre", "Name"], ["Audio aggiunto!", "Audio added!", "Audio ajouté !", "¡Audio añadido!", "Audio hinzugefügt!"], ["Licenza Creative Commons Attribuzione - Non commerciale - Condividi allo stesso modo 4.0", "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 license", "Licence Creative Commons Attribution - Pas d'utilisation commerciale - Partage dans les mêmes conditions 4.0", "Licencia Creative Commons Atribución-NoComercial-CompartirIgual 4.0", "Creative-Commons-Lizenz Namensnennung - Nicht kommerziell - Weitergabe unter gleichen Bedingungen 4.0"], ["Elimina", "Delete", "Supprimer", "Eliminar", "Löschen"], ["Fatto", "Done", "Terminé", "Listo", "Fertig"], ["Schermo intero", "Full screen", "Plein écran", "Pantalla completa", "Vollbild"], ["Riduci", "Shrink", "Réduire", "Reducir", "Verkleinern"], ["Vuoi eliminare questo sfondo? Sparirà anche dalle scene che lo usano.", "Delete this background? It will also disappear from the scenes that use it.", "Supprimer ce décor ? Il disparaîtra aussi des scènes qui l'utilisent.", "¿Eliminar este fondo? También desaparecerá de las escenas que lo usan.", "Diese Kulisse löschen? Sie verschwindet auch aus den Szenen, die sie benutzen."], ["Vuoi eliminare questo personaggio? Sparirà anche dalle scene che lo usano.", "Delete this character? It will also disappear from the scenes that use it.", "Supprimer ce personnage ? Il disparaîtra aussi des scènes qui l'utilisent.", "¿Eliminar este personaje? También desaparecerá de las escenas que lo usan.", "Diese Figur löschen? Sie verschwindet auch aus den Szenen, die sie benutzen."], ["Vuoi eliminare questa musica? Verrà tolta anche dalle scene che la usano.", "Delete this music? It will also be removed from the scenes that use it.", "Supprimer cette musique ? Elle sera aussi retirée des scènes qui l'utilisent.", "¿Eliminar esta música? También se quitará de las escenas que la usan.", "Diese Musik löschen? Sie wird auch aus den Szenen entfernt, die sie benutzen."], ["Animatoon - Il Cinema delle Tue Storie", "Animatoon - The Cinema of Your Stories", "Animatoon - Le cinéma de tes histoires", "Animatoon - El cine de tus historias", "Animatoon - Das Kino deiner Geschichten"]];
+const I18N = [["Effetti", "Effects", "Effets", "Efectos", "Effekte"], ["Boing", "Boing", "Boing", "Boing", "Boing"], ["Clap", "Clap", "Clap", "Clap", "Klatsch"], ["Applauso", "Applause", "Bravo", "Aplausos", "Applaus"], ["Pop", "Pop", "Pop", "Pop", "Plopp"], ["Ding", "Ding", "Ding", "Ding", "Ding"], ["Whoosh", "Whoosh", "Zoum", "Fiuuu", "Wusch"], ["Passi", "Steps", "Pas", "Pasos", "Schritte"], ["Tuono", "Thunder", "Tonnerre", "Trueno", "Donner"], ["Girato", "Filmed", "Filmé", "Rodado", "Gedreht"], ["Come cambiano le scene?", "How do scenes change?", "Comment changent les scènes ?", "¿Cómo cambian las escenas?", "Wie wechseln die Szenen?"], ["Nessuna", "None", "Aucune", "Ninguna", "Keine"], ["Dissolvenza", "Fade", "Fondu", "Fundido", "Überblendung"], ["Scorrimento", "Slide", "Glissement", "Deslizamiento", "Schieben"], ["Cambia la transizione", "Change the transition", "Changer la transition", "Cambiar la transición", "Übergang ändern"], ["Tieni lo schermo acceso e non cambiare pagina", "Keep the screen on and stay on this page", "Garde l'écran allumé et ne quitte pas la page", "Mantén la pantalla encendida y no cambies de página", "Lass den Bildschirm an und verlasse die Seite nicht"], ["Hai cambiato pagina durante il montaggio: nel film potrebbero mancare dei pezzi. Riprova senza uscire dall'app!", "You left the page while the movie was being made: parts may be missing. Try again without leaving the app!", "Tu as quitté la page pendant le montage : il peut manquer des morceaux dans le film. Réessaie sans quitter l'appli !", "Cambiaste de página durante el montaje: pueden faltar partes en la película. ¡Inténtalo de nuevo sin salir de la app!", "Du hast die Seite während des Schnitts verlassen: Im Film können Teile fehlen. Versuch es noch einmal, ohne die App zu verlassen!"], ["La voce di \"{n}\" non si legge e nel film manca. Prova a rifare la registrazione!", "The voice of \"{n}\" can't be read and is missing from the movie. Try recording it again!", "La voix de « {n} » est illisible et manque dans le film. Refais l'enregistrement !", "No se puede leer la voz de «{n}» y falta en la película. ¡Vuelve a grabarla!", "Die Stimme von „{n}“ lässt sich nicht lesen und fehlt im Film. Nimm sie noch einmal auf!"], ["Qualcosa è andato storto nel montaggio. Riprova!", "Something went wrong while making the movie. Try again!", "Quelque chose s'est mal passé pendant le montage. Réessaie !", "Algo salió mal en el montaje. ¡Inténtalo de nuevo!", "Beim Schneiden ist etwas schiefgegangen. Versuch es noch einmal!"], ["La registrazione non è riuscita. Riprova!", "The recording didn't work. Try again!", "L'enregistrement n'a pas marché. Réessaie !", "La grabación no funcionó. ¡Inténtalo de nuevo!", "Die Aufnahme hat nicht geklappt. Versuch es noch einmal!"], ["Il film è pronto!", "Your movie is ready!", "Ton film est prêt !", "¡Tu película está lista!", "Dein Film ist fertig!"], ["{a} scene · {t}", "{a} scenes · {t}", "{a} scènes · {t}", "{a} escenas · {t}", "{a} Szenen · {t}"], ["Adatta lo sfondo", "Fit the background", "Ajuster le fond", "Ajusta el fondo", "Hintergrund anpassen"], ["Trascina e allarga con due dita per scegliere la parte da usare", "Drag and pinch with two fingers to choose the part to use", "Fais glisser et pince avec deux doigts pour choisir la partie à utiliser", "Arrastra y pellizca con dos dedos para elegir la parte que usar", "Ziehe und zoome mit zwei Fingern, um den Ausschnitt zu wählen"], ["Riempi", "Fill", "Remplir", "Llenar", "Füllen"], ["Intera", "Whole", "Entière", "Entera", "Ganz"], ["Usa come sfondo", "Use as background", "Utiliser comme fond", "Usar como fondo", "Als Hintergrund nutzen"], ["Effetti sonori", "Sound effects", "Effets sonores", "Efectos de sonido", "Soundeffekte"], ["Mentre registri tocca i bottoni rosa: boing, clap, applausi... Il suono finisce nel film!", "While you record, tap the pink buttons: boing, clap, applause... The sound goes into the movie!", "Pendant l'enregistrement, touche les boutons roses : boing, clap, applaudissements... Le son entre dans le film !", "Mientras grabas, toca los botones rosa: boing, clap, aplausos... ¡El sonido entra en la película!", "Tippe beim Aufnehmen auf die rosa Knöpfe: Boing, Klatschen, Applaus ... Der Ton kommt in den Film!"], ["Passaggi tra le scene", "Changing scenes", "Passer d'une scène à l'autre", "Cambios de escena", "Szenenwechsel"], ["Tocca la freccia tra due scene per scegliere come cambiano: nessuno, dissolvenza o scorrimento.", "Tap the arrow between two scenes to choose how they change: none, fade or slide.", "Touche la flèche entre deux scènes pour choisir le passage : aucun, fondu ou glissement.", "Toca la flecha entre dos escenas para elegir el cambio: ninguno, fundido o deslizamiento.", "Tippe auf den Pfeil zwischen zwei Szenen und wähle den Wechsel: keiner, Überblendung oder Schieben."], ["La storia", "Story", "Histoire", "Historia", "Geschichte"], ["Titoli e squadra", "Title & crew", "Générique", "Créditos", "Titel & Team"], ["Apri", "Open", "Ouvrir", "Abrir", "Öffnen"], ["lavoro", "project", "projet", "proyecto", "Projekt"], ["Salva", "Save", "Sauver", "Guardar", "Sichern"], ["Salva il film", "Save movie", "Sauver le film", "Guardar película", "Film speichern"], ["Sfondi", "Scenery", "Décors", "Fondos", "Kulissen"], ["Personaggi", "Characters", "Personnages", "Personajes", "Figuren"], ["Musica", "Music", "Musique", "Música", "Musik"], ["Foto", "Photo", "Photo", "Foto", "Foto"], ["File", "File", "Fichier", "Archivo", "Datei"], ["Aggiungi musica", "Add music", "Ajouter musique", "Añadir música", "Musik hinzufügen"], ["Togli la musica", "Remove music", "Retirer la musique", "Quitar la música", "Musik entfernen"], ["Registra", "Record", "Enregistrer", "Grabar", "Aufnehmen"], ["Guarda", "Watch", "Regarder", "Ver", "Ansehen"], ["Rifai", "Redo", "Refaire", "Repetir", "Nochmal"], ["Stop", "Stop", "Stop", "Parar", "Stopp"], ["Togli", "Remove", "Retirer", "Quitar", "Entfernen"], ["Usa", "Use", "Utiliser", "Usar", "Nutzen"], ["Si registra!", "Recording!", "Enregistrement !", "¡Grabando!", "Aufnahme läuft!"], ["Nessuna musica", "No music", "Pas de musique", "Sin música", "Keine Musik"], ["Personaggio", "Character", "Personnage", "Personaje", "Figur"], ["Personaggio {n}", "Character {n}", "Personnage {n}", "Personaje {n}", "Figur {n}"], ["Montaggio del film in corso...", "Making the movie...", "Montage du film en cours...", "Montando la película...", "Film wird zusammengestellt..."], ["Quante parti ha la nostra storia?", "How many parts does our story have?", "Combien de parties a notre histoire ?", "¿Cuántas partes tiene nuestra historia?", "Wie viele Teile hat unsere Geschichte?"], ["3 parti", "3 parts", "3 parties", "3 partes", "3 Teile"], ["5 parti", "5 parts", "5 parties", "5 partes", "5 Teile"], ["Inizio · Svolgimento · Conclusione", "Beginning · Middle · Ending", "Début · Développement · Conclusion", "Inicio · Desarrollo · Desenlace", "Anfang · Handlung · Schluss"], ["Inizio · Problema · Sfida · Colpo di scena · Finale", "Beginning · Problem · Challenge · Twist · Ending", "Début · Problème · Défi · Rebondissement · Fin", "Inicio · Problema · Desafío · Giro · Final", "Anfang · Problem · Hürde · Wendung · Ende"], ["Chiudi", "Close", "Fermer", "Cerrar", "Schließen"], ["Nuova scena", "New scene", "Nouvelle scène", "Nueva escena", "Neue Szene"], ["Come si chiama la scena?", "What is the scene called?", "Comment s'appelle la scène ?", "¿Cómo se llama la escena?", "Wie heißt die Szene?"], ["Dove la metto?", "Where should I put it?", "Où la mettre ?", "¿Dónde la pongo?", "Wohin damit?"], ["In fondo alla storia", "At the end of the story", "À la fin de l'histoire", "Al final de la historia", "Am Ende der Geschichte"], ["Dopo questa scena", "After this scene", "Après cette scène", "Después de esta escena", "Nach dieser Szene"], ["Annulla", "Cancel", "Annuler", "Cancelar", "Abbrechen"], ["Aggiungi", "Add", "Ajouter", "Añadir", "Hinzufügen"], ["Titolo e squadra", "Title & crew", "Titre & équipe", "Título y equipo", "Titel & Team"], ["Titolo del film", "Movie title", "Titre du film", "Título de la película", "Filmtitel"], ["Classe o sezione", "Class or group", "Classe ou groupe", "Clase o grupo", "Klasse oder Gruppe"], ["Regia e montaggio", "Directing & editing", "Réalisation et montage", "Dirección y montaje", "Regie & Schnitt"], ["Storia e sceneggiatura", "Story & script", "Histoire et scénario", "Historia y guion", "Geschichte & Drehbuch"], ["Disegni e animazione", "Drawings & animation", "Dessins et animation", "Dibujos y animación", "Zeichnungen & Animation"], ["Voci e suoni", "Voices & sounds", "Voix et sons", "Voces y sonidos", "Stimmen & Geräusche"], ["Fatto!", "Done!", "Terminé !", "¡Listo!", "Fertig!"], ["Inquadra:", "Frame it:", "Cadre :", "Encuadra:", "Ausschnitt:"], ["Scatta", "Snap", "Prendre", "Capturar", "Foto machen"], ["Puntini", "Dots", "Points", "Puntos", "Punkte"], ["Matita", "Pencil", "Crayon", "Lápiz", "Stift"], ["Indietro", "Back", "Retour", "Atrás", "Zurück"], ["Ricomincia", "Start over", "Recommencer", "Empezar de nuevo", "Neu anfangen"], ["Salva personaggio", "Save character", "Enregistrer le personnage", "Guardar personaje", "Figur speichern"], ["Aggiungi una nuova scena", "Add a new scene", "Ajouter une nouvelle scène", "Añadir una escena nueva", "Neue Szene hinzufügen"], ["Apri un lavoro salvato", "Open a saved project", "Ouvrir un projet enregistré", "Abrir un proyecto guardado", "Gespeichertes Projekt öffnen"], ["Salva il lavoro per riprenderlo dopo", "Save your project to continue later", "Enregistre ton projet pour continuer plus tard", "Guarda tu proyecto para seguir después", "Speichere dein Projekt, um später weiterzumachen"], ["Es. Nel bosco incantato", "E.g. In the enchanted forest", "Ex. Dans la forêt enchantée", "Ej. En el bosque encantado", "z. B. Im Zauberwald"], ["Es. Sezione B, Classe 2ª B", "E.g. Group B, Class 2B", "Ex. Groupe B, classe 2 B", "Ej. Grupo B, clase 2.º B", "z. B. Gruppe B, Klasse 2b"], ["Es. Mario, Luca", "E.g. Mario, Luca", "Ex. Mario, Luca", "Ej. Mario, Luca", "z. B. Mario, Luca"], ["Es. Sofia, Elena", "E.g. Sofia, Elena", "Ex. Sofia, Elena", "Ej. Sofia, Elena", "z. B. Sofia, Elena"], ["Es. Marco, Anna", "E.g. Marco, Anna", "Ex. Marco, Anna", "Ej. Marco, Anna", "z. B. Marco, Anna"], ["Es. Matteo, Chiara", "E.g. Matteo, Chiara", "Ex. Matteo, Chiara", "Ej. Matteo, Chiara", "z. B. Matteo, Chiara"], ["Elimina scena", "Delete scene", "Supprimer la scène", "Eliminar escena", "Szene löschen"], ["Sfondo attivo in questa scena", "Background used in this scene", "Décor utilisé dans cette scène", "Fondo usado en esta escena", "Hintergrund dieser Szene"], ["Tocca per impostare come sfondo", "Tap to use as background", "Touche pour l'utiliser comme décor", "Toca para usarlo de fondo", "Tippen, um als Hintergrund zu nutzen"], ["Tocca per posizionare sul palco", "Tap to place on stage", "Touche pour le placer sur la scène", "Toca para ponerlo en el escenario", "Tippen, um auf die Bühne zu stellen"], ["Rimuovi da questa scena", "Remove from this scene", "Retirer de cette scène", "Quitar de esta escena", "Aus dieser Szene entfernen"], ["Una storia ha bisogno di almeno una scena!", "A story needs at least one scene!", "Une histoire a besoin d'au moins une scène !", "¡Una historia necesita al menos una escena!", "Eine Geschichte braucht mindestens eine Szene!"], ["Se cambi le parti della storia, le registrazioni fatte si cancellano. Vuoi continuare?", "If you change the parts of the story, the recordings you made will be deleted. Do you want to continue?", "Si tu changes les parties de l'histoire, les enregistrements déjà faits seront effacés. Veux-tu continuer ?", "Si cambias las partes de la historia, se borrarán las grabaciones hechas. ¿Quieres continuar?", "Wenn du die Teile der Geschichte änderst, werden die Aufnahmen gelöscht. Möchtest du weitermachen?"], ["Vuoi buttare via la scena \"{n}\"?", "Do you want to throw away the scene \"{n}\"?", "Veux-tu jeter la scène « {n} » ?", "¿Quieres tirar la escena \"{n}\"?", "Möchtest du die Szene „{n}“ wegwerfen?"], ["Vuoi cancellare la registrazione di \"{n}\" e rifarla da capo?", "Do you want to delete the recording of \"{n}\" and do it again?", "Veux-tu effacer l'enregistrement de « {n} » et le refaire depuis le début ?", "¿Quieres borrar la grabación de \"{n}\" y hacerla de nuevo?", "Möchtest du die Aufnahme von „{n}“ löschen und neu aufnehmen?"], ["Questa musica non si apre. Prova con un altro file!", "This music won't open. Try another file!", "Cette musique ne s'ouvre pas. Essaie un autre fichier !", "Esta música no se abre. ¡Prueba con otro archivo!", "Diese Musik lässt sich nicht öffnen. Probier eine andere Datei!"], ["Dietro le quinte: qui nessuno ti vede", "Backstage: nobody can see you here", "Dans les coulisses : ici personne ne te voit", "Entre bastidores: aquí nadie te ve", "Hinter den Kulissen: Hier sieht dich niemand"], ["Inquadra lo sfondo", "Frame the background", "Cadre le décor", "Encuadra el fondo", "Hintergrund aufnehmen"], ["Inquadra il disegno", "Frame the drawing", "Cadre le dessin", "Encuadra el dibujo", "Zeichnung aufnehmen"], ["La fotocamera non parte. Controlla di aver dato il permesso!", "The camera won't start. Check that you gave permission!", "La caméra ne démarre pas. Vérifie que tu as donné l'autorisation !", "La cámara no arranca. ¡Comprueba que diste permiso!", "Die Kamera startet nicht. Prüfe, ob du die Erlaubnis gegeben hast!"], ["Il microfono non parte. Controlla di aver dato il permesso!", "The microphone won't start. Check that you gave permission!", "Le micro ne démarre pas. Vérifie que tu as donné l'autorisation !", "El micrófono no arranca. ¡Comprueba que diste permiso!", "Das Mikrofon startet nicht. Prüfe, ob du die Erlaubnis gegeben hast!"], ["Tocca un puntino alla volta, tutto intorno al disegno", "Tap one dot at a time, all around the drawing", "Touche un point à la fois, tout autour du dessin", "Toca un punto cada vez, alrededor del dibujo", "Tippe nacheinander Punkte rund um die Zeichnung"], ["Disegna il contorno senza staccare il dito", "Draw the outline without lifting your finger", "Dessine le contour sans lever le doigt", "Dibuja el contorno sin levantar el dedo", "Zeichne die Umrisse, ohne den Finger abzusetzen"], ["Metti almeno 3 puntini attorno al disegno!", "Put at least 3 dots around the drawing!", "Mets au moins 3 points autour du dessin !", "¡Pon al menos 3 puntos alrededor del dibujo!", "Setze mindestens 3 Punkte um die Zeichnung!"], ["Come si chiama questo personaggio?", "What is this character called?", "Comment s'appelle ce personnage ?", "¿Cómo se llama este personaje?", "Wie heißt diese Figur?"], ["Prima registra almeno una scena, poi potrai salvare il film!", "First record at least one scene, then you can save the movie!", "Enregistre d'abord au moins une scène, tu pourras ensuite sauver le film !", "¡Primero graba al menos una escena y luego podrás guardar la película!", "Nimm zuerst mindestens eine Szene auf, dann kannst du den Film speichern!"], ["Preparazione del film...", "Getting the movie ready...", "Préparation du film...", "Preparando la película...", "Film wird vorbereitet..."], ["Creazione Titoli Iniziali...", "Making the opening titles...", "Création du générique de début...", "Creando los títulos iniciales...", "Vorspann wird erstellt..."], ["Montaggio Scena {a} di {b}...", "Editing scene {a} of {b}...", "Montage de la scène {a} sur {b}...", "Montando la escena {a} de {b}...", "Szene {a} von {b} wird zusammengestellt..."], ["Titoli di Coda e Applausi...", "Closing credits and applause...", "Générique de fin et applaudissements...", "Créditos finales y aplausos...", "Abspann und Applaus..."], ["Salvataggio file completato!", "File saved!", "Fichier enregistré !", "¡Archivo guardado!", "Datei gespeichert!"], ["Regia: {n}", "Directed by: {n}", "Réalisation : {n}", "Dirección: {n}", "Regie: {n}"], ["STORIA & SCENEGGIATURA", "STORY & SCRIPT", "HISTOIRE & SCÉNARIO", "HISTORIA Y GUION", "GESCHICHTE & DREHBUCH"], ["DISEGNI & ANIMAZIONE", "DRAWINGS & ANIMATION", "DESSINS & ANIMATION", "DIBUJOS Y ANIMACIÓN", "ZEICHNUNGEN & ANIMATION"], ["VOCI, SUONI & MICROFONO", "VOICES, SOUNDS & MICROPHONE", "VOIX, SONS & MICRO", "VOCES, SONIDOS Y MICRÓFONO", "STIMMEN, GERÄUSCHE & MIKROFON"], ["REGIA & MONTAGGIO", "DIRECTING & EDITING", "RÉALISATION & MONTAGE", "DIRECCIÓN Y MONTAJE", "REGIE & SCHNITT"], ["FINE", "THE END", "FIN", "FIN", "ENDE"], ["Sto salvando il lavoro...", "Saving your project...", "J'enregistre ton projet...", "Guardando tu proyecto...", "Projekt wird gespeichert..."], ["Lavoro salvato!", "Project saved!", "Projet enregistré !", "¡Proyecto guardado!", "Projekt gespeichert!"], ["Non riesco a salvare il lavoro. Riprova!", "I can't save the project. Try again!", "Impossible d'enregistrer le projet. Réessaie !", "No puedo guardar el proyecto. ¡Inténtalo otra vez!", "Das Projekt konnte nicht gespeichert werden. Versuch es noch einmal!"], ["Se apri un lavoro salvato, quello che vedi adesso viene sostituito. Vuoi continuare?", "If you open a saved project, what you see now will be replaced. Do you want to continue?", "Si tu ouvres un projet enregistré, ce que tu vois maintenant sera remplacé. Veux-tu continuer ?", "Si abres un proyecto guardado, lo que ves ahora se sustituirá. ¿Quieres continuar?", "Wenn du ein gespeichertes Projekt öffnest, wird das, was du jetzt siehst, ersetzt. Möchtest du weitermachen?"], ["Sto aprendo il lavoro...", "Opening your project...", "J'ouvre ton projet...", "Abriendo tu proyecto...", "Projekt wird geöffnet..."], ["Lavoro aperto!", "Project opened!", "Projet ouvert !", "¡Proyecto abierto!", "Projekt geöffnet!"], ["Questo file non sembra un lavoro di Animatoon. Prova con un altro!", "This file doesn't look like an Animatoon project. Try another one!", "Ce fichier ne semble pas être un projet Animatoon. Essaie-en un autre !", "Este archivo no parece un proyecto de Animatoon. ¡Prueba con otro!", "Diese Datei sieht nicht wie ein Animatoon-Projekt aus. Probier eine andere!"], ["Tocca {a} o {b}<br>per aggiungere uno sfondo", "Tap {a} or {b}<br>to add a background", "Touche {a} ou {b}<br>pour ajouter un décor", "Toca {a} o {b}<br>para añadir un fondo", "Tippe auf {a} oder {b}<br>für einen Hintergrund"], ["Fotografa un disegno,<br>poi ritaglialo col dito", "Photograph a drawing,<br>then cut it out with your finger", "Photographie un dessin,<br>puis découpe-le avec le doigt", "Fotografía un dibujo<br>y recórtalo con el dedo", "Fotografiere eine Zeichnung<br>und schneide sie mit dem Finger aus"], ["Aggiungi una musica<br>con il tasto viola", "Add some music<br>with the purple button", "Ajoute une musique<br>avec le bouton violet", "Añade una música<br>con el botón morado", "Füge Musik hinzu<br>mit dem lila Knopf"], ["1. Inizio", "1. Beginning", "1. Début", "1. Inicio", "1. Anfang"], ["2. Svolgimento", "2. Middle", "2. Développement", "2. Desarrollo", "2. Handlung"], ["3. Conclusione", "3. Ending", "3. Conclusion", "3. Desenlace", "3. Schluss"], ["2. Problema", "2. Problem", "2. Problème", "2. Problema", "2. Problem"], ["3. Sfida", "3. Challenge", "3. Défi", "3. Desafío", "3. Hürde"], ["4. Colpo di Scena", "4. Twist", "4. Rebondissement", "4. Giro", "4. Wendung"], ["5. Finale", "5. Ending", "5. Fin", "5. Final", "5. Ende"], ["Scena {n}", "Scene {n}", "Scène {n}", "Escena {n}", "Szene {n}"], ["La Nostra Storia", "Our Story", "Notre histoire", "Nuestra historia", "Unsere Geschichte"], ["Classe 1ª B", "Class 1B", "Classe 1B", "Clase 1.º B", "Klasse 1b"], ["Regista", "Director", "Réalisateur", "Director", "Regie"], ["Sceneggiatori", "Writers", "Scénaristes", "Guionistas", "Drehbuch"], ["Disegnatori", "Artists", "Dessinateurs", "Dibujantes", "Zeichner"], ["Doppiatori", "Voice actors", "Doubleurs", "Actores de voz", "Sprecher"], ["Aiuto", "Help", "Aide", "Ayuda", "Hilfe"], ["Come funziona", "How it works", "Comment ça marche", "Cómo funciona", "So funktioniert's"], ["Ho capito!", "Got it!", "Compris !", "¡Entendido!", "Verstanden!"], ["Scegli lo sfondo", "Pick a background", "Choisis le décor", "Elige el fondo", "Wähle die Kulisse"], ["Nella scheda verde aggiungi uno sfondo con la foto o con un file.", "In the green tab, add a background with a photo or a file.", "Dans l'onglet vert, ajoute un décor avec une photo ou un fichier.", "En la pestaña verde, añade un fondo con una foto o un archivo.", "Im grünen Reiter fügst du mit einem Foto oder einer Datei eine Kulisse hinzu."], ["Crea i personaggi", "Create characters", "Crée les personnages", "Crea los personajes", "Erstelle Figuren"], ["Fotografa un disegno e ritaglialo col dito: diventa un personaggio.", "Photograph a drawing and cut it out with your finger: it becomes a character.", "Photographie un dessin et découpe-le avec le doigt : il devient un personnage.", "Fotografía un dibujo y recórtalo con el dedo: se convierte en un personaje.", "Fotografiere eine Zeichnung und schneide sie mit dem Finger aus: Sie wird zur Figur."], ["Metti in scena", "Set the stage", "Mets en scène", "Monta la escena", "Bühne einrichten"], ["Tocca un personaggio per portarlo sul palco. Trascinalo, ruotalo e ingrandiscilo con i cerchi arancioni. Fuori dal riquadro giallo è dietro le quinte.", "Tap a character to bring it on stage. Drag, rotate and resize it with the orange circles. Outside the yellow frame is backstage.", "Touche un personnage pour l'amener sur la scène. Déplace-le, tourne-le et agrandis-le avec les cercles orange. En dehors du cadre jaune, ce sont les coulisses.", "Toca un personaje para llevarlo al escenario. Arrástralo, gíralo y agrándalo con los círculos naranjas. Fuera del marco amarillo es entre bastidores.", "Tippe auf eine Figur, um sie auf die Bühne zu holen. Verschiebe, drehe und vergrößere sie mit den orangefarbenen Kreisen. Außerhalb des gelben Rahmens ist hinter den Kulissen."], ["Aggiungi la musica", "Add music", "Ajoute la musique", "Añade música", "Füge Musik hinzu"], ["Scegli una musica da un file oppure registrala con il microfono.", "Pick music from a file or record it with the microphone.", "Choisis une musique dans un fichier ou enregistre-la avec le micro.", "Elige una música de un archivo o grábala con el micrófono.", "Wähle Musik aus einer Datei oder nimm sie mit dem Mikrofon auf."], ["Registra la scena", "Record the scene", "Enregistre la scène", "Graba la escena", "Nimm die Szene auf"], ["Premi Registra, racconta la storia con la voce e muovi i personaggi.", "Press Record, tell the story with your voice and move the characters.", "Appuie sur Enregistrer, raconte l'histoire avec ta voix et déplace les personnages.", "Pulsa Grabar, cuenta la historia con tu voz y mueve a los personajes.", "Drücke Aufnehmen, erzähle die Geschichte mit deiner Stimme und bewege die Figuren."], ["Costruisci la storia", "Build the story", "Construis l'histoire", "Construye la historia", "Baue die Geschichte"], ["In basso aggiungi altre scene con il +. Trascinale per cambiare l'ordine.", "At the bottom, add more scenes with the +. Drag them to change the order.", "En bas, ajoute d'autres scènes avec le +. Fais-les glisser pour changer l'ordre.", "Abajo, añade más escenas con el +. Arrástralas para cambiar el orden.", "Unten fügst du mit dem + weitere Szenen hinzu. Zieh sie, um die Reihenfolge zu ändern."], ["Crea il film", "Make the movie", "Crée le film", "Crea la película", "Mach den Film"], ["Alla fine premi Salva il film: ottieni il video con titoli di testa, titoli di coda e applausi.", "At the end press Save movie: you get the video with opening titles, closing credits and applause.", "À la fin, appuie sur Sauver le film : tu obtiens la vidéo avec générique de début, générique de fin et applaudissements.", "Al final pulsa Guardar película: obtienes el vídeo con títulos iniciales, créditos finales y aplausos.", "Am Ende drückst du Film speichern: Du bekommst das Video mit Vorspann, Abspann und Applaus."], ["Salva il lavoro", "Save your project", "Enregistre ton projet", "Guarda tu proyecto", "Sichere dein Projekt"], ["Con Salva puoi continuare più tardi, con Apri riprendi un lavoro salvato.", "Use Save to continue later and Open to pick up a saved project.", "Avec Sauver, tu continues plus tard ; avec Ouvrir, tu reprends un projet enregistré.", "Con Guardar puedes seguir más tarde; con Abrir retomas un proyecto guardado.", "Mit Sichern machst du später weiter, mit Öffnen holst du ein gespeichertes Projekt zurück."], ["Registra l'audio", "Record audio", "Enregistrer le son", "Grabar audio", "Audio aufnehmen"], ["Tocca il tasto rosso e parla, canta o suona", "Tap the red button and talk, sing or play", "Touche le bouton rouge et parle, chante ou joue", "Toca el botón rojo y habla, canta o toca", "Tippe auf den roten Knopf und sprich, sing oder spiel"], ["Nome", "Name", "Nom", "Nombre", "Name"], ["Audio aggiunto!", "Audio added!", "Audio ajouté !", "¡Audio añadido!", "Audio hinzugefügt!"], ["Licenza Creative Commons Attribuzione - Non commerciale - Condividi allo stesso modo 4.0", "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 license", "Licence Creative Commons Attribution - Pas d'utilisation commerciale - Partage dans les mêmes conditions 4.0", "Licencia Creative Commons Atribución-NoComercial-CompartirIgual 4.0", "Creative-Commons-Lizenz Namensnennung - Nicht kommerziell - Weitergabe unter gleichen Bedingungen 4.0"], ["Elimina", "Delete", "Supprimer", "Eliminar", "Löschen"], ["Fatto", "Done", "Terminé", "Listo", "Fertig"], ["Schermo intero", "Full screen", "Plein écran", "Pantalla completa", "Vollbild"], ["Riduci", "Shrink", "Réduire", "Reducir", "Verkleinern"], ["Vuoi eliminare questo sfondo? Sparirà anche dalle scene che lo usano.", "Delete this background? It will also disappear from the scenes that use it.", "Supprimer ce décor ? Il disparaîtra aussi des scènes qui l'utilisent.", "¿Eliminar este fondo? También desaparecerá de las escenas que lo usan.", "Diese Kulisse löschen? Sie verschwindet auch aus den Szenen, die sie benutzen."], ["Vuoi eliminare questo personaggio? Sparirà anche dalle scene che lo usano.", "Delete this character? It will also disappear from the scenes that use it.", "Supprimer ce personnage ? Il disparaîtra aussi des scènes qui l'utilisent.", "¿Eliminar este personaje? También desaparecerá de las escenas que lo usan.", "Diese Figur löschen? Sie verschwindet auch aus den Szenen, die sie benutzen."], ["Vuoi eliminare questa musica? Verrà tolta anche dalle scene che la usano.", "Delete this music? It will also be removed from the scenes that use it.", "Supprimer cette musique ? Elle sera aussi retirée des scènes qui l'utilisent.", "¿Eliminar esta música? También se quitará de las escenas que la usan.", "Diese Musik löschen? Sie wird auch aus den Szenen entfernt, die sie benutzen."], ["Animatoon - Il Cinema delle Tue Storie", "Animatoon - The Cinema of Your Stories", "Animatoon - Le cinéma de tes histoires", "Animatoon - El cine de tus historias", "Animatoon - Das Kino deiner Geschichten"]];
 const LANG_IDX = { it: 0, en: 1, fr: 2, es: 3, de: 4 };
 const I18N_MAP = new Map(I18N.map(r => [r[0], r]));
 let LANG = 'it';
@@ -540,6 +618,7 @@ function initLanguage() {
 
     const storyState = {
       currentAct: 0,
+      transition: 'fade',
       acts: []
     };
 
@@ -577,11 +656,12 @@ function initLanguage() {
         musicBuffer: null,
         musicName: null,
         events: [],
+        sfx: [],
         duration: 0
       };
     }
 
-    function openPresetModal() { document.getElementById('preset-modal').classList.add('active'); }
+    function openPresetModal() { if (isRecording) return; document.getElementById('preset-modal').classList.add('active'); }
     function closePresetModal() { document.getElementById('preset-modal').classList.remove('active'); }
 
     function openCreditsModal() {
@@ -605,6 +685,7 @@ function initLanguage() {
     }
 
     function openAddSceneModal() {
+      if (isRecording) return;
       const input = document.getElementById('new-scene-title');
       input.value = T('Scena {n}', {n: storyState.acts.length + 1});
       document.getElementById('add-scene-modal').classList.add('active');
@@ -614,6 +695,7 @@ function initLanguage() {
     function closeAddSceneModal() { document.getElementById('add-scene-modal').classList.remove('active'); }
 
     function confirmAddScene() {
+      if (isRecording) return;
       const titleInput = document.getElementById('new-scene-title');
       const posSelect = document.getElementById('new-scene-position');
       const name = titleInput.value.trim() || T('Scena {n}', {n: storyState.acts.length + 1});
@@ -638,6 +720,7 @@ function initLanguage() {
 
     function deleteSceneByIndex(index, event) {
       if (event) event.stopPropagation();
+      if (isRecording) return;
 
       if (storyState.acts.length <= 1) {
         alert(T("Una storia ha bisogno di almeno una scena!"));
@@ -661,6 +744,7 @@ function initLanguage() {
     }
 
     function applyNarrativePreset(presetType) {
+      if (isRecording) return;
       if (storyState.acts.some(a => a.audioBlob && a.duration > 0)) {
         if (!confirm(T("Se cambi le parti della storia, le registrazioni fatte si cancellano. Vuoi continuare?"))) {
           
@@ -722,10 +806,12 @@ function initLanguage() {
     }
 
     function confirmReRecord() {
+      if (isRecording) return;
       const cur = storyState.acts[storyState.currentAct];
       if (confirm(T('Vuoi cancellare la registrazione di "{n}" e rifarla da capo?', {n: cur.name}))) {
         cur.audioBlob = null;
         cur.events = [];
+        cur.sfx = [];
         cur.duration = 0;
         updateStageRecordingCluster();
         renderActsUI();
@@ -746,8 +832,15 @@ function initLanguage() {
       updateStageRecordingCluster();
 
       previewAudioContext = new (window.AudioContext || window.webkitAudioContext)();
-      const arrayBuffer = await cur.audioBlob.arrayBuffer();
-      const audioBuffer = await previewAudioContext.decodeAudioData(arrayBuffer);
+      let audioBuffer;
+      try {
+        audioBuffer = await previewAudioContext.decodeAudioData(await cur.audioBlob.arrayBuffer());
+      } catch (err) {
+        console.error(err);
+        alert(T('La voce di "{n}" non si legge e nel film manca. Prova a rifare la registrazione!', { n: cur.name }));
+        stopPreviewScene();
+        return;
+      }
 
       const voiceSrc = previewAudioContext.createBufferSource();
       voiceSrc.buffer = audioBuffer;
@@ -765,6 +858,8 @@ function initLanguage() {
         musicSrc.start();
       }
 
+      const sfxT0 = previewAudioContext.currentTime;
+      (cur.sfx || []).forEach(e => playSfx(e.id, previewAudioContext, previewAudioContext.destination, sfxT0 + e.t / 1000));
       voiceSrc.start();
       const startT = performance.now();
 
@@ -922,6 +1017,13 @@ function initLanguage() {
           card.appendChild(musicBadge);
         }
 
+        if (act.audioBlob && act.duration > 0) {
+          const dur = document.createElement('span');
+          dur.className = 'scene-dur';
+          dur.textContent = fmtClock(act.duration);
+          card.appendChild(dur);
+        }
+
         const label = document.createElement('div');
         label.className = 'scene-label';
         label.innerText = act.name;
@@ -933,7 +1035,10 @@ function initLanguage() {
         if (index < storyState.acts.length - 1) {
           const arrow = document.createElement('div');
           arrow.className = 'flow-arrow';
-          arrow.innerHTML = '<svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg>';
+          const tIcon = storyState.transition === 'fade' ? 'i-trans-fade' : storyState.transition === 'slide' ? 'i-trans-slide' : 'i-arrow';
+          arrow.innerHTML = '<svg class="ico" aria-hidden="true"><use href="#' + tIcon + '"/></svg>';
+          arrow.title = T('Cambia la transizione');
+          arrow.onclick = openPresetModal;
           node.appendChild(arrow);
         }
 
@@ -941,9 +1046,11 @@ function initLanguage() {
       });
 
       updateStageRecordingCluster();
+      updateTotalTime();
     }
 
     function reorderScenes(fromIndex, toIndex) {
+      if (isRecording) return;
       const movedScene = storyState.acts.splice(fromIndex, 1)[0];
       storyState.acts.splice(toIndex, 0, movedScene);
 
@@ -1270,7 +1377,7 @@ function initLanguage() {
 
     function recordCurrentState(char) {
       if (!isRecording || !char) return;
-      const act = storyState.acts[storyState.currentAct];
+      const act = recAct || storyState.acts[storyState.currentAct];
       act.events.push({
         t: performance.now() - recStartTime,
         id: char.id,
@@ -1596,13 +1703,7 @@ function initLanguage() {
       const file = e.target.files[0];
       if (!file) return;
       const img = new Image();
-      img.onload = () => {
-        storyState.acts[storyState.currentAct].background = img;
-        addBackgroundToLibrary(img);
-        renderActsUI();
-        renderLibraryUI();
-        drawScene(storyState.acts[storyState.currentAct]);
-      };
+      img.onload = () => openBgCrop(img);
       img.src = URL.createObjectURL(file);
       e.target.value = "";
     }
@@ -1644,11 +1745,7 @@ function initLanguage() {
       capturedImg.onload = () => {
         closeCameraModal();
         if (camTarget === 'background') {
-          storyState.acts[storyState.currentAct].background = capturedImg;
-          addBackgroundToLibrary(capturedImg);
-          renderActsUI();
-          renderLibraryUI();
-          drawScene(storyState.acts[storyState.currentAct]);
+          openBgCrop(capturedImg);
         } else {
           initCropWithImage(capturedImg);
         }
@@ -1909,29 +2006,61 @@ function initLanguage() {
       croppedImg.src = cutCanvas.toDataURL('image/png');
     }
 
+    let recAct = null, recTimerId = null, recEndMs = 0;
+    function fmtClock(ms) {
+      const s = Math.max(0, Math.floor(ms / 1000));
+      return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+    }
+    function startRecTimer() {
+      const el = document.getElementById('rec-timer');
+      el.textContent = '0:00';
+      clearInterval(recTimerId);
+      recTimerId = setInterval(() => { el.textContent = fmtClock(performance.now() - recStartTime); }, 200);
+    }
+    function stopRecTimer() { clearInterval(recTimerId); recTimerId = null; }
+
     async function toggleRecord() {
       const badge = document.getElementById('status-badge');
-      const act = storyState.acts[storyState.currentAct];
 
       if (!isRecording) {
+        const act = storyState.acts[storyState.currentAct];
+        let stream;
         try {
-          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          stream = await acquireMic();
+          clearMicRelease();
+        } catch (err) {
+          alert(T("Il microfono non parte. Controlla di aver dato il permesso!"));
+          return;
+        }
+        try {
           mediaRecorder = new MediaRecorder(stream);
           audioChunks = [];
           act.events = [];
+          act.sfx = [];
+          recAct = act;
 
           mediaRecorder.ondataavailable = (e) => {
-            if (e.data.size > 0) audioChunks.push(e.data);
+            if (e.data && e.data.size > 0) audioChunks.push(e.data);
           };
 
           mediaRecorder.onstop = () => {
-            act.audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-            act.duration = performance.now() - recStartTime;
+            const mime = (mediaRecorder && mediaRecorder.mimeType) || 'audio/webm';
+            const blob = new Blob(audioChunks, { type: mime });
+            stopRecTimer();
+            recAct = null;
             badge.classList.remove('show');
             isRecording = false;
+            if (stream !== micStream) stream.getTracks().forEach(t => t.stop());
+            else scheduleMicRelease();
+            if (blob.size > 0) {
+              act.audioBlob = blob;
+              act.duration = recEndMs;
+            } else {
+              act.audioBlob = null; act.duration = 0; act.events = []; act.sfx = [];
+              alert(T("La registrazione non è riuscita. Riprova!"));
+            }
             updateStageRecordingCluster();
             renderActsUI();
-            stream.getTracks().forEach(t => t.stop());
           };
 
           recStartTime = performance.now();
@@ -1939,45 +2068,78 @@ function initLanguage() {
           isRecording = true;
           act.characters.forEach(c => recordCurrentState(c));
           badge.classList.add('show');
+          startRecTimer();
           updateStageRecordingCluster();
         } catch (err) {
+          console.error(err);
+          try { if (stream !== micStream) stream.getTracks().forEach(t => t.stop()); } catch (e) {}
+          recAct = null; isRecording = false;
           alert(T("Il microfono non parte. Controlla di aver dato il permesso!"));
         }
       } else {
+        recEndMs = performance.now() - recStartTime;
         mediaRecorder.stop();
       }
     }
 
-    function playProceduralApplause(audioCtx, destNode, durationSec = 8.5) {
-      const bufferSize = Math.floor(audioCtx.sampleRate * durationSec);
-      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-      const data = buffer.getChannelData(0);
-
-      for (let i = 0; i < bufferSize; i++) {
-        const white = Math.random() * 2 - 1;
-        data[i] = white * (Math.random() > 0.86 ? 1.0 : 0.22);
+    function applauseBuffer(ac, dur) {
+      const sr = ac.sampleRate, n = Math.floor(sr * dur);
+      const buf = ac.createBuffer(2, n, sr);
+      const rise = Math.min(1.0, dur * 0.15), plateauEnd = dur * 0.62;
+      const dens = (t) => t < rise ? Math.pow(t / rise, 1.3) : t < plateauEnd ? 1 : Math.pow(Math.max(0, (dur - t) / (dur - plateauEnd)), 1.6);
+      const peakRate = 85;                       // battiti al secondo per canale
+      for (let ch = 0; ch < 2; ch++) {
+        const d = buf.getChannelData(ch);
+        const total = Math.floor(dur * peakRate / 0.7);
+        for (let k = 0; k < total; k++) {
+          const t0 = Math.random() * dur;
+          if (Math.random() > dens(t0)) continue;
+          const start = Math.floor(t0 * sr);
+          const near = Math.random() < 0.18;     // qualche battito "vicino", più forte
+          const amp = (near ? 0.9 : 0.2 + Math.random() * 0.4) * (0.6 + 0.4 * dens(t0));
+          const tau = (0.005 + Math.random() * 0.012) * sr;
+          const len = Math.min(n - start, Math.floor(tau * 6));
+          const fc = 900 + Math.random() * 2600;
+          const f = 2 * Math.sin(Math.PI * fc / sr), q = 1 / (0.9 + Math.random() * 1.6);
+          let low = 0, band = 0;
+          for (let i = 0; i < len; i++) {
+            const x = Math.random() * 2 - 1;
+            low += f * band;
+            const high = x - low - q * band;
+            band += f * high;
+            d[start + i] += band * amp * Math.exp(-i / tau);
+          }
+        }
       }
-
-      const noise = audioCtx.createBufferSource();
-      noise.buffer = buffer;
-
-      const filter = audioCtx.createBiquadFilter();
-      filter.type = 'bandpass';
-      filter.frequency.value = 1150;
-      filter.Q.value = 0.9;
-
-      const gain = audioCtx.createGain();
-      const now = audioCtx.currentTime;
-      gain.gain.setValueAtTime(0.01, now);
-      gain.gain.exponentialRampToValueAtTime(0.85, now + 0.8);
-      gain.gain.setValueAtTime(0.85, now + durationSec - 1.2);
-      gain.gain.exponentialRampToValueAtTime(0.01, now + durationSec);
-
-      noise.connect(filter);
-      filter.connect(gain);
-      gain.connect(destNode);
-
-      noise.start();
+      let sum = 0, cnt = 0;
+      for (let ch = 0; ch < 2; ch++) { const d = buf.getChannelData(ch); for (let i = 0; i < n; i += 7) { sum += d[i] * d[i]; cnt++; } }
+      const rms = Math.sqrt(sum / Math.max(1, cnt)) || 1;
+      const g = 0.11 / rms;
+      for (let ch = 0; ch < 2; ch++) { const d = buf.getChannelData(ch); for (let i = 0; i < n; i++) d[i] = Math.tanh(d[i] * g * 1.3); }
+      return buf;
+    }
+    function applauseIR(ac) {
+      if (!ac.__ir) {
+        const sr = ac.sampleRate, n = Math.floor(sr * 1.3);
+        const b = ac.createBuffer(2, n, sr);
+        for (let ch = 0; ch < 2; ch++) { const d = b.getChannelData(ch); for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 2.5); }
+        ac.__ir = b;
+      }
+      return ac.__ir;
+    }
+    // applauso di una platea: tanti battiti di mani singoli, filtrati, con un po' di eco della sala
+    function playApplause(ac, dest, t, dur, gain) {
+      const src = ac.createBufferSource();
+      src.buffer = applauseBuffer(ac, dur);
+      const dry = ac.createGain(); dry.gain.value = 0.9 * gain;
+      const wet = ac.createGain(); wet.gain.value = 0.35 * gain;
+      const conv = ac.createConvolver(); conv.buffer = applauseIR(ac);
+      src.connect(dry); dry.connect(dest);
+      src.connect(conv); conv.connect(wet); wet.connect(dest);
+      src.start(t);
+    }
+    function playProceduralApplause(audioCtx, destNode, durationSec = 8.5) {
+      playApplause(audioCtx, destNode, audioCtx.currentTime, durationSec, 1);
     }
 
     function drawIntroFrame(ctx, alpha = 1.0) {
@@ -2109,169 +2271,265 @@ function initLanguage() {
       });
     }
 
+    function renderActFrame(c2, act, t) {
+      c2.setTransform(1, 0, 0, 1, 0, 0);
+      c2.clearRect(0, 0, SCENE_WIDTH, SCENE_HEIGHT);
+      if (act.background) {
+        c2.drawImage(act.background, 0, 0, SCENE_WIDTH, SCENE_HEIGHT);
+      } else {
+        c2.fillStyle = '#3B3A6E';
+        c2.fillRect(0, 0, SCENE_WIDTH, SCENE_HEIGHT);
+      }
+      act.characters.forEach(c => {
+        const s = charStateAt(act, c, t);
+        c2.save();
+        c2.translate(s.x + s.w / 2, s.y + s.h / 2);
+        c2.rotate(s.rot);
+        if (s.flip) c2.scale(-1, 1);
+        c2.drawImage(c.img, -s.w / 2, -s.h / 2, s.w, s.h);
+        c2.restore();
+      });
+    }
+
+    function makeActFrameCanvas(act, t) {
+      const c = document.createElement('canvas');
+      c.width = SCENE_WIDTH; c.height = SCENE_HEIGHT;
+      renderActFrame(c.getContext('2d'), act, t);
+      return c;
+    }
+
+    function playTransitionExport(frameA, frameB, type, expCtx, ms) {
+      return new Promise((resolve) => {
+        const start = performance.now();
+        function step() {
+          const p = Math.min(1, (performance.now() - start) / ms);
+          const e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+          expCtx.setTransform(1, 0, 0, 1, 0, 0);
+          if (type === 'slide') {
+            const dx = Math.round(SCENE_WIDTH * e);
+            expCtx.globalAlpha = 1;
+            expCtx.drawImage(frameA, -dx, 0);
+            expCtx.drawImage(frameB, SCENE_WIDTH - dx, 0);
+          } else {
+            expCtx.globalAlpha = 1;
+            expCtx.drawImage(frameA, 0, 0);
+            expCtx.globalAlpha = e;
+            expCtx.drawImage(frameB, 0, 0);
+            expCtx.globalAlpha = 1;
+          }
+          if (p < 1) requestAnimationFrame(step); else resolve();
+        }
+        requestAnimationFrame(step);
+      });
+    }
+
+    let exportRunning = false, movieUrl = null, movieExt = 'mp4';
+
     async function exportFullMovie() {
-      const actsToExport = storyState.acts.filter(a => a.audioBlob && a.duration > 0);
-      if (actsToExport.length === 0) {
+      if (isRecording || isPreviewPlaying || exportRunning) return;
+      const list = storyState.acts.filter(a => a.audioBlob && a.duration > 0);
+      if (list.length === 0) {
         alert(T("Prima registra almeno una scena, poi potrai salvare il film!"));
         return;
       }
-
+      exportRunning = true;
       selectCharacter(null);
 
       const exportBtn = document.getElementById('export-btn');
       const overlay = document.getElementById('export-overlay');
       const statusText = document.getElementById('export-status-text');
+      const bar = document.querySelector('#export-bar i');
+      const timeEl = document.getElementById('export-time');
 
       exportBtn.disabled = true;
-      overlay.classList.add('show');
+      overlay.classList.add('show', 'movie');
       statusText.innerText = T("Preparazione del film...");
+      bar.style.width = '0%';
+      timeEl.textContent = '';
 
-      const exportCanvas = document.createElement('canvas');
-      exportCanvas.width = SCENE_WIDTH;
-      exportCanvas.height = SCENE_HEIGHT;
-      const expCtx = exportCanvas.getContext('2d');
-
-      drawIntroFrame(expCtx, 1.0);
-
+      // l'audio va creato subito, mentre il tocco è ancora "fresco" (iPad)
       const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      const audioDest = audioCtx.createMediaStreamDestination();
+      let wake = null, hiddenWhile = false, timer = null, recorder = null, silenceOsc = null, result = null;
+      const info = { audioFailed: [] };
+      const onVis = () => { if (document.hidden) hiddenWhile = true; };
+      document.addEventListener('visibilitychange', onVis);
 
-      const silenceOsc = audioCtx.createOscillator();
-      const silenceGain = audioCtx.createGain();
-      silenceGain.gain.value = 0.0001;
-      silenceOsc.connect(silenceGain);
-      silenceGain.connect(audioDest);
-      silenceOsc.start();
+      try {
+        try { await audioCtx.resume(); } catch (e) {}
+        try { if (navigator.wakeLock) wake = await navigator.wakeLock.request('screen'); } catch (e) {}
 
-      const canvasStream = exportCanvas.captureStream(30);
-      const combinedStream = new MediaStream([
-        ...canvasStream.getVideoTracks(),
-        ...audioDest.stream.getAudioTracks()
-      ]);
+        const trType = storyState.transition || 'none';
+        const trMs = trType === 'none' ? 0 : 600;
+        const totalMs = 3800 + list.reduce((s, a) => s + a.duration, 0) + trMs * (list.length - 1) + 8500 + 750;
 
-      let mimeType = 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"';
-      let ext = 'mp4';
-      if (!MediaRecorder.isTypeSupported(mimeType)) {
-        mimeType = 'video/webm; codecs=vp9,opus';
-        ext = 'webm';
-      }
+        const exportCanvas = document.createElement('canvas');
+        exportCanvas.width = SCENE_WIDTH;
+        exportCanvas.height = SCENE_HEIGHT;
+        const expCtx = exportCanvas.getContext('2d');
+        drawIntroFrame(expCtx, 1.0);
 
-      const recorder = new MediaRecorder(combinedStream, { mimeType });
-      const videoChunks = [];
-      recorder.ondataavailable = (e) => videoChunks.push(e.data);
+        const audioDest = audioCtx.createMediaStreamDestination();
+        silenceOsc = audioCtx.createOscillator();
+        const silenceGain = audioCtx.createGain();
+        silenceGain.gain.value = 0.0001;
+        silenceOsc.connect(silenceGain);
+        silenceGain.connect(audioDest);
+        silenceOsc.start();
 
-      const recorderStarted = new Promise(resolve => {
-        recorder.onstart = () => resolve();
-      });
+        const canvasStream = exportCanvas.captureStream(30);
+        const combinedStream = new MediaStream([
+          ...canvasStream.getVideoTracks(),
+          ...audioDest.stream.getAudioTracks()
+        ]);
 
-      recorder.start();
-      await recorderStarted;
-      await new Promise(r => setTimeout(r, 350));
+        const mimeType = ['video/mp4; codecs="avc1.42E01E, mp4a.40.2"', 'video/mp4', 'video/webm; codecs=vp9,opus', 'video/webm; codecs=vp8,opus', 'video/webm']
+          .find(m => MediaRecorder.isTypeSupported(m)) || '';
+        const ext = mimeType.startsWith('video/mp4') ? 'mp4' : 'webm';
 
-      statusText.innerText = T("Creazione Titoli Iniziali...");
-      await renderIntroScreen(expCtx, 3800);
+        recorder = new MediaRecorder(combinedStream, mimeType ? { mimeType, videoBitsPerSecond: 4000000 } : { videoBitsPerSecond: 4000000 });
+        const videoChunks = [];
+        recorder.ondataavailable = (e) => { if (e.data && e.data.size) videoChunks.push(e.data); };
+        const recorderStarted = new Promise(resolve => { recorder.onstart = () => resolve(); });
 
-      let actNum = 1;
-      for (const act of storyState.acts) {
-        if (!act.audioBlob) continue;
-        statusText.innerText = T('Montaggio Scena {a} di {b}...', {a: actNum, b: actsToExport.length});
-        await playActForExport(act, audioCtx, audioDest, expCtx);
-        actNum++;
-      }
+        recorder.start();
+        const kick = setInterval(() => drawIntroFrame(expCtx, 1.0), 100);
+        await Promise.race([recorderStarted, new Promise(r => setTimeout(r, 2000))]);
+        clearInterval(kick);
+        await new Promise(r => setTimeout(r, 350));
 
-      statusText.innerText = T("Titoli di Coda e Applausi...");
-      await renderOutroCreditsScreen(expCtx, audioCtx, audioDest, 8500);
+        const t0 = performance.now();
+        timer = setInterval(() => {
+          const e = performance.now() - t0;
+          bar.style.width = Math.min(100, e / totalMs * 100) + '%';
+          timeEl.textContent = fmtClock(e) + ' / ' + fmtClock(totalMs);
+        }, 250);
 
-      statusText.innerText = T("Salvataggio file completato!");
+        statusText.innerText = T("Creazione Titoli Iniziali...");
+        await renderIntroScreen(expCtx, 3800);
 
-      recorder.onstop = () => {
-        silenceOsc.stop();
-        const finalBlob = new Blob(videoChunks, { type: mimeType });
-        const url = URL.createObjectURL(finalBlob);
-        const a = document.createElement('a');
-        a.href = url;
-        const cleanTitle = (projectCredits.title || 'film_storia').replace(/\s+/g, '_').toLowerCase();
-        a.download = `${cleanTitle}.${ext}`;
-        a.click();
-        URL.revokeObjectURL(url);
-        audioCtx.close();
+        for (let i = 0; i < list.length; i++) {
+          const act = list[i];
+          statusText.innerText = T('Montaggio Scena {a} di {b}...', { a: i + 1, b: list.length });
+          const lenMs = await playActForExport(act, audioCtx, audioDest, expCtx, info);
+          if (trMs && i < list.length - 1) {
+            const fa = makeActFrameCanvas(act, lenMs);
+            const fb = makeActFrameCanvas(list[i + 1], 0);
+            await playTransitionExport(fa, fb, trType, expCtx, trMs);
+          }
+        }
 
-        overlay.classList.remove('show');
+        statusText.innerText = T("Titoli di Coda e Applausi...");
+        await renderOutroCreditsScreen(expCtx, audioCtx, audioDest, 8500);
+
+        statusText.innerText = T("Salvataggio file completato!");
+        await new Promise(r => setTimeout(r, 400));
+        try { recorder.requestData(); } catch (e) {}
+        const stopped = new Promise(res => { recorder.onstop = res; });
+        recorder.stop();
+        await stopped;
+        try { silenceOsc.stop(); } catch (e) {}
+
+        const finalBlob = new Blob(videoChunks, { type: recorder.mimeType || mimeType || 'video/webm' });
+        if (finalBlob.size < 2000) throw new Error('film vuoto');
+        result = { blob: finalBlob, ext, scenes: list.length, ms: performance.now() - t0 };
+      } catch (err) {
+        console.error(err);
+        try { if (recorder && recorder.state !== 'inactive') { recorder.onstop = null; recorder.stop(); } } catch (e) {}
+        alert(T("Qualcosa è andato storto nel montaggio. Riprova!"));
+      } finally {
+        clearInterval(timer);
+        document.removeEventListener('visibilitychange', onVis);
+        try { if (wake) wake.release(); } catch (e) {}
+        try { audioCtx.close(); } catch (e) {}
+        overlay.classList.remove('show', 'movie');
         exportBtn.disabled = false;
+        exportRunning = false;
         drawScene(storyState.acts[storyState.currentAct]);
-      };
+      }
 
-      recorder.stop();
+      if (result) {
+        if (hiddenWhile) alert(T("Hai cambiato pagina durante il montaggio: nel film potrebbero mancare dei pezzi. Riprova senza uscire dall'app!"));
+        if (info.audioFailed.length) alert(T('La voce di "{n}" non si legge e nel film manca. Prova a rifare la registrazione!', { n: info.audioFailed.join(', ') }));
+        showMovie(result);
+      }
     }
 
-    async function playActForExport(act, audioCtx, audioDest, expCtx) {
-      const arrayBuffer = await act.audioBlob.arrayBuffer();
-      const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
-      const voiceSource = audioCtx.createBufferSource();
-      voiceSource.buffer = audioBuffer;
-      voiceSource.connect(audioDest);
+    function showMovie(r) {
+      if (movieUrl) URL.revokeObjectURL(movieUrl);
+      movieUrl = URL.createObjectURL(r.blob);
+      movieExt = r.ext;
+      const v = document.getElementById('movie-video');
+      v.src = movieUrl;
+      document.getElementById('movie-info').textContent = T('{a} scene · {t}', { a: r.scenes, t: fmtClock(r.ms) });
+      document.getElementById('movie-modal').classList.add('active');
+    }
+    function closeMovieModal() {
+      const v = document.getElementById('movie-video');
+      try { v.pause(); } catch (e) {}
+      v.removeAttribute('src'); try { v.load(); } catch (e) {}
+      document.getElementById('movie-modal').classList.remove('active');
+      if (movieUrl) { URL.revokeObjectURL(movieUrl); movieUrl = null; }
+    }
+    function saveMovieFile() {
+      if (!movieUrl) return;
+      const a = document.createElement('a');
+      a.href = movieUrl;
+      const cleanTitle = (projectCredits.title || 'film_storia').replace(/\s+/g, '_').toLowerCase();
+      a.download = cleanTitle + '.' + movieExt;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => a.remove(), 1000);
+    }
+
+    async function playActForExport(act, audioCtx, audioDest, expCtx, info) {
+      let audioBuffer = null;
+      try {
+        audioBuffer = await audioCtx.decodeAudioData(await act.audioBlob.arrayBuffer());
+      } catch (e) {
+        console.warn('audio non leggibile', e);
+        info.audioFailed.push(act.name);
+      }
+      const lenMs = Math.max(act.duration, audioBuffer ? audioBuffer.duration * 1000 : 0);
+      const at = audioCtx.currentTime;
+
+      let voiceSource = null;
+      if (audioBuffer) {
+        voiceSource = audioCtx.createBufferSource();
+        voiceSource.buffer = audioBuffer;
+        voiceSource.connect(audioDest);
+      }
 
       let musicSource = null;
-      let musicGain = null;
       if (act.musicBuffer) {
         musicSource = audioCtx.createBufferSource();
         musicSource.buffer = act.musicBuffer;
         musicSource.loop = true;
-
-        musicGain = audioCtx.createGain();
-        const now = audioCtx.currentTime;
-        musicGain.gain.setValueAtTime(0.01, now);
-        musicGain.gain.linearRampToValueAtTime(backgroundMusicVolume, now + 0.6);
-
-        const sceneDurationSec = act.duration / 1000;
-        if (sceneDurationSec > 1.2) {
-          musicGain.gain.setValueAtTime(backgroundMusicVolume, now + sceneDurationSec - 0.8);
-          musicGain.gain.linearRampToValueAtTime(0.001, now + sceneDurationSec);
+        const musicGain = audioCtx.createGain();
+        musicGain.gain.setValueAtTime(0.01, at);
+        musicGain.gain.linearRampToValueAtTime(backgroundMusicVolume, at + 0.6);
+        const sceneSec = lenMs / 1000;
+        if (sceneSec > 1.2) {
+          musicGain.gain.setValueAtTime(backgroundMusicVolume, at + sceneSec - 0.8);
+          musicGain.gain.linearRampToValueAtTime(0.001, at + sceneSec);
         }
-
         musicSource.connect(musicGain);
         musicGain.connect(audioDest);
-        musicSource.start();
       }
+
+      (act.sfx || []).forEach(e => playSfx(e.id, audioCtx, audioDest, at + e.t / 1000));
+      if (voiceSource) voiceSource.start(at);
+      if (musicSource) musicSource.start(at);
 
       return new Promise((resolve) => {
         const startTime = performance.now();
-        const duration = act.duration;
-        voiceSource.start();
-
-        function step(now) {
-          const elapsed = now - startTime;
-
-          expCtx.setTransform(1, 0, 0, 1, 0, 0);
-          expCtx.clearRect(0, 0, SCENE_WIDTH, SCENE_HEIGHT);
-          if (act.background) {
-            expCtx.drawImage(act.background, 0, 0, SCENE_WIDTH, SCENE_HEIGHT);
-          } else {
-            expCtx.fillStyle = '#3B3A6E';
-            expCtx.fillRect(0, 0, SCENE_WIDTH, SCENE_HEIGHT);
-          }
-
-          act.characters.forEach(c => {
-            const s = charStateAt(act, c, elapsed);
-            const posX = s.x, posY = s.y, w = s.w, h = s.h, rot = s.rot, flip = s.flip;
-
-            expCtx.save();
-            const cx = posX + w / 2;
-            const cy = posY + h / 2;
-            expCtx.translate(cx, cy);
-            expCtx.rotate(rot);
-            if (flip) expCtx.scale(-1, 1);
-            expCtx.drawImage(c.img, -w / 2, -h / 2, w, h);
-            expCtx.restore();
-          });
-
-          if (elapsed < duration) {
+        function step() {
+          const elapsed = performance.now() - startTime;
+          renderActFrame(expCtx, act, Math.min(elapsed, lenMs));
+          if (elapsed < lenMs) {
             requestAnimationFrame(step);
           } else {
-            if (musicSource) {
-              try { musicSource.stop(); } catch (e) {}
-            }
-            resolve();
+            if (musicSource) { try { musicSource.stop(); } catch (e) {} }
+            resolve(lenMs);
           }
         }
         requestAnimationFrame(step);
@@ -2334,7 +2592,7 @@ function initLanguage() {
         const defs = projectLibrary.characters;
         const tracks = projectLibrary.musicTracks;
         const data = {
-          app: 'Animatoon', version: 1, savedAt: new Date().toISOString(),
+          app: 'Animatoon', version: 1, savedAt: new Date().toISOString(), transition: storyState.transition,
           credits: Object.assign({}, projectCredits), musicVolume: backgroundMusicVolume,
           characterCounter: characterCounter, currentAct: storyState.currentAct,
           backgrounds: bgs.map(i => imgToDataURL(i, 1520, true)),
@@ -2350,7 +2608,7 @@ function initLanguage() {
                 return { id: c.id, defId: c.defId, def: di, name: c.name, aspect: c.aspect, x: c.x, y: c.y, width: c.width, height: c.height, rotation: c.rotation, flipped: c.flipped,
                          img: di === -1 ? imgToDataURL(c.img, 800, false) : undefined };
               }),
-              events: a.events, duration: a.duration,
+              events: a.events, sfx: a.sfx || [], duration: a.duration,
               audio: a.audioBlob ? await blobToDataURL(a.audioBlob) : null,
               musicTrack: tr ? tr.id : null
             };
@@ -2417,6 +2675,7 @@ function initLanguage() {
               x: c.x, y: c.y, width: c.width, height: c.height, rotation: c.rotation || 0, flipped: !!c.flipped });
           }
           act.events = a.events || [];
+          act.sfx = a.sfx || [];
           act.duration = a.duration || 0;
           act.audioBlob = a.audio ? dataURLToBlob(a.audio) : null;
           const tr = tracks.find(t => t.id === a.musicTrack);
@@ -2431,6 +2690,7 @@ function initLanguage() {
         storyState.acts = acts.length ? acts : [createEmptyAct(T('1. Inizio'))];
         storyState.currentAct = Math.min(Math.max(0, data.currentAct | 0), storyState.acts.length - 1);
         Object.assign(projectCredits, data.credits || {});
+        setTransition((data.transition === 'none' || data.transition === 'slide') ? data.transition : 'fade');
         characterCounter = data.characterCounter || (defs.length + 1);
         const vol = (typeof data.musicVolume === 'number') ? data.musicVolume : 0.2;
         document.getElementById('music-volume').value = vol; updateMusicVolume(vol);
@@ -2521,6 +2781,7 @@ function initLanguage() {
     /* ===== ELIMINA DALLA LIBRERIA + SCHERMO INTERO ===== */
     let libEditMode = false;
     function toggleLibEdit() {
+      if (isRecording) return;
       libEditMode = !libEditMode;
       document.getElementById('assets-sidebar').classList.toggle('editing', libEditMode);
     }
@@ -2563,31 +2824,362 @@ function initLanguage() {
       storyState.acts.forEach(a => { if (a.musicBuffer === track.buffer) { a.musicBuffer = null; a.musicName = null; } });
       refreshAfterDelete();
     }
-    function toggleFocus(force) {
+    let micStream = null, micPrompting = false, fsPending = false;
+    function micLive() { return !!micStream && micStream.getAudioTracks().some(t => t.readyState === 'live'); }
+    function stopMic() { if (micStream) { micStream.getTracks().forEach(t => t.stop()); micStream = null; } }
+    async function micState() {
+      try { return (await navigator.permissions.query({ name: 'microphone' })).state; } catch (e) { return 'unknown'; }
+    }
+    // chiede il microfono (o riusa quello già aperto); il permesso fa uscire Chrome dallo schermo intero, quindi lo segniamo
+    let micRelTimer = null;
+    function clearMicRelease() { clearTimeout(micRelTimer); micRelTimer = null; }
+    // il microfono resta aperto tra una scena e l'altra (così il permesso non si richiede ogni volta); si chiude dopo 10 minuti di inattività
+    function scheduleMicRelease() {
+      clearMicRelease();
+      micRelTimer = setTimeout(() => { if (!isRecording) stopMic(); }, 10 * 60 * 1000);
+    }
+    async function acquireMic() {
+      if (micLive()) { clearMicRelease(); return micStream; }
+      micPrompting = true;
+      try { micStream = await navigator.mediaDevices.getUserMedia({ audio: true }); return micStream; }
+      finally { setTimeout(() => { micPrompting = false; }, 800); }
+    }
+    function isFs() { return !!(document.fullscreenElement || document.webkitFullscreenElement); }
+    function enterFs() {
+      if (isFs()) { fsPending = false; return; }
+      const el = document.documentElement;
+      const f = el.requestFullscreen || el.webkitRequestFullscreen;
+      if (!f) return;
+      try {
+        const p = f.call(el);
+        if (p && p.then) p.then(() => { fsPending = false; }, () => { fsPending = true; });
+        else fsPending = false;
+      } catch (e) { fsPending = true; }
+    }
+    async function toggleFocus(force) {
       const on = (force === undefined) ? !document.body.classList.contains('focus') : force;
       document.body.classList.toggle('focus', on);
-      const el = document.documentElement;
-      try {
-        if (on) {
-          const f = el.requestFullscreen || el.webkitRequestFullscreen;
-          if (f && !document.fullscreenElement && !document.webkitFullscreenElement) { const p = f.call(el); if (p && p.catch) p.catch(() => {}); }
-        } else {
-          const x = document.exitFullscreen || document.webkitExitFullscreen;
-          if (x && (document.fullscreenElement || document.webkitFullscreenElement)) { const p = x.call(document); if (p && p.catch) p.catch(() => {}); }
+      if (on) {
+        // il permesso del microfono si chiede PRIMA dello schermo intero: poi resta aperto finché si resta in modalità ampia
+        if (!isRecording && !micLive() && navigator.mediaDevices && (await micState()) !== 'granted') {
+          try { await acquireMic(); scheduleMicRelease(); } catch (e) {}
         }
-      } catch (e) {}
+        if (document.body.classList.contains('focus')) enterFs();
+      } else {
+        fsPending = false;
+        try {
+          const x = document.exitFullscreen || document.webkitExitFullscreen;
+          if (x && isFs()) { const p = x.call(document); if (p && p.catch) p.catch(() => {}); }
+        } catch (e) {}
+      }
       setTimeout(() => drawScene(storyState.acts[storyState.currentAct]), 80);
     }
-    document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && document.body.classList.contains('focus')) toggleFocus(false); });
-    document.addEventListener('webkitfullscreenchange', () => { if (!document.webkitFullscreenElement && document.body.classList.contains('focus')) toggleFocus(false); });
+    function onFsChange() {
+      if (!isFs() && document.body.classList.contains('focus')) {
+        // uscita causata dalla richiesta del microfono o durante la registrazione: restiamo in modalità ampia e rientriamo al prossimo tocco
+        if (micPrompting || isRecording) { fsPending = true; return; }
+        toggleFocus(false);
+      }
+    }
+    document.addEventListener('fullscreenchange', onFsChange);
+    document.addEventListener('webkitfullscreenchange', onFsChange);
+    ['pointerup', 'keydown'].forEach(ev => document.addEventListener(ev, () => {
+      if (fsPending && document.body.classList.contains('focus')) enterFs();
+    }, true));
 
-    function showTab(name) {
+    /* ===== EFFETTI SONORI (sintetizzati con Web Audio) ===== */
+    let sfxCtx = null;
+    function getSfxCtx() {
+      if (!sfxCtx) {
+        try { sfxCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; }
+      }
+      if (sfxCtx.state === 'suspended') { try { sfxCtx.resume(); } catch (e) {} }
+      return sfxCtx;
+    }
+    (function () {
+      const evs = ['pointerup', 'touchend', 'click'];
+      const unlock = () => {
+        const c = getSfxCtx();
+        if (c && c.state === 'running') evs.forEach(ev => document.removeEventListener(ev, unlock));
+      };
+      evs.forEach(ev => document.addEventListener(ev, unlock, { passive: true }));
+    })();
+
+    function sfxNoiseBuf(ac) {
+      if (!ac.__noise) {
+        const n = Math.floor(ac.sampleRate * 2.5);
+        const b = ac.createBuffer(1, n, ac.sampleRate);
+        const d = b.getChannelData(0);
+        for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+        ac.__noise = b;
+      }
+      return ac.__noise;
+    }
+    function sfxNoise(ac, t, dur) {
+      const s = ac.createBufferSource();
+      s.buffer = sfxNoiseBuf(ac);
+      s.start(t, Math.random() * Math.max(0, 2.45 - dur), dur);
+      return s;
+    }
+    function sfxEnv(ac, t, peak, attack, dur) {
+      const g = ac.createGain();
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.linearRampToValueAtTime(peak, t + attack);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + attack + dur);
+      return g;
+    }
+    function sfxTone(ac, o, t, type, f0, f1, dur, peak) {
+      const osc = ac.createOscillator();
+      osc.type = type;
+      osc.frequency.setValueAtTime(f0, t);
+      if (f1 !== f0) osc.frequency.exponentialRampToValueAtTime(f1, t + dur);
+      const g = sfxEnv(ac, t, peak, 0.005, dur);
+      osc.connect(g); g.connect(o);
+      osc.start(t); osc.stop(t + dur + 0.05);
+    }
+    const SFX = {
+      boing(ac, o, t) {
+        const dur = 0.8, n = 56;
+        const c1 = new Float32Array(n), c2 = new Float32Array(n);
+        for (let i = 0; i < n; i++) {
+          const x = i / (n - 1);
+          c1[i] = 110 + 380 * Math.exp(-3.4 * x) * (1 + 0.45 * Math.sin(2 * Math.PI * 7 * x * (1 + x)));
+          c2[i] = c1[i] * 2;
+        }
+        [[c1, 'sine', 0.8], [c2, 'triangle', 0.22]].forEach(([c, type, pk]) => {
+          const osc = ac.createOscillator();
+          osc.type = type;
+          osc.frequency.setValueCurveAtTime(c, t, dur);
+          const g = sfxEnv(ac, t, pk, 0.01, dur - 0.01);
+          osc.connect(g); g.connect(o);
+          osc.start(t); osc.stop(t + dur + 0.05);
+        });
+      },
+      clap(ac, o, t) {
+        [0, 0.018, 0.04].forEach((dt, i) => {
+          const dur = i < 2 ? 0.05 : 0.2;
+          const s = sfxNoise(ac, t + dt, dur);
+          const bp = ac.createBiquadFilter();
+          bp.type = 'bandpass'; bp.frequency.value = 1500 + i * 150; bp.Q.value = 0.9;
+          const g = sfxEnv(ac, t + dt, i < 2 ? 0.9 : 1.2, 0.003, dur);
+          s.connect(bp); bp.connect(g); g.connect(o);
+        });
+      },
+      applauso(ac, o, t) { playApplause(ac, o, t, 3.2, 1); },
+      pop(ac, o, t) {
+        sfxTone(ac, o, t, 'sine', 950, 260, 0.1, 0.9);
+        const s = sfxNoise(ac, t, 0.02);
+        const g = sfxEnv(ac, t, 0.4, 0.002, 0.02);
+        s.connect(g); g.connect(o);
+      },
+      ding(ac, o, t) {
+        [[1046, 0.6, 1.5], [1046 * 2.76, 0.25, 0.7], [1046 * 5.4, 0.12, 0.3]].forEach(([f, pk, d]) => {
+          sfxTone(ac, o, t, 'sine', f, f, d, pk);
+        });
+      },
+      whoosh(ac, o, t) {
+        const s = sfxNoise(ac, t, 0.9);
+        const bp = ac.createBiquadFilter();
+        bp.type = 'bandpass'; bp.Q.value = 2.2;
+        bp.frequency.setValueAtTime(250, t);
+        bp.frequency.exponentialRampToValueAtTime(2600, t + 0.38);
+        bp.frequency.exponentialRampToValueAtTime(300, t + 0.85);
+        const g = ac.createGain();
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.linearRampToValueAtTime(1.1, t + 0.38);
+        g.gain.linearRampToValueAtTime(0.0001, t + 0.88);
+        s.connect(bp); bp.connect(g); g.connect(o);
+      },
+      passi(ac, o, t) {
+        for (let k = 0; k < 4; k++) {
+          const tk = t + k * 0.3;
+          sfxTone(ac, o, tk, 'sine', 130, 50, 0.12, 0.9);
+          const s = sfxNoise(ac, tk, 0.07);
+          const lp = ac.createBiquadFilter();
+          lp.type = 'lowpass'; lp.frequency.value = 600;
+          const g = sfxEnv(ac, tk, 0.5, 0.004, 0.07);
+          s.connect(lp); lp.connect(g); g.connect(o);
+        }
+      },
+      tuono(ac, o, t) {
+        const s = sfxNoise(ac, t, 2.3);
+        const lp = ac.createBiquadFilter();
+        lp.type = 'lowpass';
+        lp.frequency.setValueAtTime(500, t);
+        lp.frequency.exponentialRampToValueAtTime(90, t + 2.2);
+        const g = ac.createGain();
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.linearRampToValueAtTime(1.3, t + 0.05);
+        g.gain.exponentialRampToValueAtTime(0.45, t + 0.55);
+        g.gain.linearRampToValueAtTime(0.85, t + 0.75);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + 2.3);
+        s.connect(lp); lp.connect(g); g.connect(o);
+        sfxTone(ac, o, t, 'sine', 60, 40, 1.6, 0.7);
+      }
+    };
+    function playSfx(id, ac, dest, t) {
+      const f = SFX[id];
+      if (!f) return;
+      const o = ac.createGain();
+      o.gain.value = 0.85;
+      o.connect(dest);
+      try { f(ac, o, Math.max(t, ac.currentTime)); } catch (e) { console.warn('effetto', id, e); }
+    }
+    function sfxTap(id, ev) {
+      if (ev && ev.preventDefault) ev.preventDefault();
+      const ac = getSfxCtx();
+      if (!ac) return;
+      playSfx(id, ac, ac.destination, ac.currentTime + 0.01);
+      const btn = ev && ev.currentTarget;
+      if (btn && btn.classList) { btn.classList.add('hit'); setTimeout(() => btn.classList.remove('hit'), 180); }
+      if (isRecording && recAct) {
+        recAct.sfx.push({ t: Math.round(performance.now() - recStartTime), id: id });
+      }
+    }
+
+    /* ===== TEMPO DI GIRATO ===== */
+    function updateTotalTime() {
+      const ms = storyState.acts.reduce((s, a) => s + ((a.audioBlob && a.duration) || 0), 0);
+      const el = document.getElementById('total-time-val');
+      if (el) el.textContent = fmtClock(ms);
+    }
+
+    /* ===== TRANSIZIONI ===== */
+    function setTransition(t) {
+      storyState.transition = (t === 'fade' || t === 'slide') ? t : 'none';
+      document.querySelectorAll('.trans-chip').forEach(b => b.classList.toggle('on', b.dataset.t === storyState.transition));
+      renderActsUI();
+    }
+
+    /* ===== RITAGLIA LO SFONDO ===== */
+    const BC = { img: null, iw: 1, ih: 1, s: 1, fit: 1, fill: 1, max: 4, ox: 0, oy: 0 };
+    function setSceneBackground(img) {
+      storyState.acts[storyState.currentAct].background = img;
+      addBackgroundToLibrary(img);
+      renderActsUI();
+      renderLibraryUI();
+      drawScene(storyState.acts[storyState.currentAct]);
+    }
+    function openBgCrop(img) {
+      const iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height;
+      const target = SCENE_WIDTH / SCENE_HEIGHT;
+      if (Math.abs(iw / ih - target) < 0.02 * target) { setSceneBackground(img); return; }
+      BC.img = img; BC.iw = iw; BC.ih = ih;
+      BC.fit = Math.min(SCENE_WIDTH / iw, SCENE_HEIGHT / ih);
+      BC.fill = Math.max(SCENE_WIDTH / iw, SCENE_HEIGHT / ih);
+      BC.max = BC.fill * 4;
+      document.getElementById('bgcrop-modal').classList.add('active');
+      bcFill();
+    }
+    function closeBgCrop() {
+      document.getElementById('bgcrop-modal').classList.remove('active');
+      BC.img = null;
+    }
+    function bcClamp() {
+      const w = BC.iw * BC.s, h = BC.ih * BC.s;
+      BC.ox = w >= SCENE_WIDTH ? Math.min(0, Math.max(SCENE_WIDTH - w, BC.ox)) : Math.min(SCENE_WIDTH - w, Math.max(0, BC.ox));
+      BC.oy = h >= SCENE_HEIGHT ? Math.min(0, Math.max(SCENE_HEIGHT - h, BC.oy)) : Math.min(SCENE_HEIGHT - h, Math.max(0, BC.oy));
+    }
+    function bcSync() {
+      const v = Math.log(BC.s / BC.fit) / Math.log(BC.max / BC.fit);
+      document.getElementById('bgcrop-zoom').value = Math.round(Math.min(1, Math.max(0, v)) * 1000);
+    }
+    function bcDraw(c, k) {
+      const W = SCENE_WIDTH * k, H = SCENE_HEIGHT * k;
+      c.setTransform(1, 0, 0, 1, 0, 0);
+      c.fillStyle = '#fff'; c.fillRect(0, 0, W, H);
+      const w = BC.iw * BC.s * k, h = BC.ih * BC.s * k;
+      if (w < W - 1 || h < H - 1) {
+        const cs = Math.max(W / BC.iw, H / BC.ih);
+        c.drawImage(BC.img, (W - BC.iw * cs) / 2, (H - BC.ih * cs) / 2, BC.iw * cs, BC.ih * cs);
+        c.fillStyle = 'rgba(255,255,255,.62)'; c.fillRect(0, 0, W, H);
+      }
+      c.drawImage(BC.img, BC.ox * k, BC.oy * k, w, h);
+    }
+    function bcRedraw() {
+      if (!BC.img) return;
+      bcClamp();
+      bcDraw(document.getElementById('bgcrop-canvas').getContext('2d'), 1);
+      bcSync();
+    }
+    function bcSetScale(s, px, py) {
+      s = Math.min(BC.max, Math.max(BC.fit, s));
+      BC.ox = px - (px - BC.ox) * s / BC.s;
+      BC.oy = py - (py - BC.oy) * s / BC.s;
+      BC.s = s;
+    }
+    function bcFill() { if (!BC.img) return; BC.s = BC.fill; BC.ox = (SCENE_WIDTH - BC.iw * BC.s) / 2; BC.oy = (SCENE_HEIGHT - BC.ih * BC.s) / 2; bcRedraw(); }
+    function bcFit() { if (!BC.img) return; BC.s = BC.fit; BC.ox = (SCENE_WIDTH - BC.iw * BC.s) / 2; BC.oy = (SCENE_HEIGHT - BC.ih * BC.s) / 2; bcRedraw(); }
+    function bcZoomSlider(v) {
+      if (!BC.img) return;
+      bcSetScale(BC.fit * Math.pow(BC.max / BC.fit, v / 1000), SCENE_WIDTH / 2, SCENE_HEIGHT / 2);
+      bcRedraw();
+    }
+    function confirmBgCrop() {
+      if (!BC.img) return;
+      const k = 2;
+      const c = document.createElement('canvas');
+      c.width = SCENE_WIDTH * k; c.height = SCENE_HEIGHT * k;
+      bcClamp();
+      bcDraw(c.getContext('2d'), k);
+      const out = new Image();
+      out.onload = () => { setSceneBackground(out); closeBgCrop(); };
+      out.src = c.toDataURL('image/jpeg', 0.9);
+    }
+    (function () {
+      const cv = document.getElementById('bgcrop-canvas');
+      const pts = new Map();
+      let ref = { mid: { x: 0, y: 0 }, dist: 0 };
+      const pos = (e) => {
+        const r = cv.getBoundingClientRect();
+        return { x: (e.clientX - r.left) * SCENE_WIDTH / r.width, y: (e.clientY - r.top) * SCENE_HEIGHT / r.height };
+      };
+      const resetRef = () => {
+        const a = [...pts.values()];
+        if (a.length === 1) ref = { mid: a[0], dist: 0 };
+        else if (a.length >= 2) ref = { mid: { x: (a[0].x + a[1].x) / 2, y: (a[0].y + a[1].y) / 2 }, dist: Math.hypot(a[0].x - a[1].x, a[0].y - a[1].y) };
+      };
+      cv.addEventListener('pointerdown', (e) => {
+        if (!BC.img) return;
+        try { cv.setPointerCapture(e.pointerId); } catch (x) {}
+        pts.set(e.pointerId, pos(e)); resetRef(); e.preventDefault();
+      });
+      cv.addEventListener('pointermove', (e) => {
+        if (!BC.img || !pts.has(e.pointerId)) return;
+        pts.set(e.pointerId, pos(e));
+        const a = [...pts.values()];
+        if (a.length === 1) {
+          BC.ox += a[0].x - ref.mid.x; BC.oy += a[0].y - ref.mid.y;
+          ref = { mid: a[0], dist: 0 };
+        } else {
+          const mid = { x: (a[0].x + a[1].x) / 2, y: (a[0].y + a[1].y) / 2 };
+          const d = Math.hypot(a[0].x - a[1].x, a[0].y - a[1].y);
+          BC.ox += mid.x - ref.mid.x; BC.oy += mid.y - ref.mid.y;
+          if (ref.dist > 0 && d > 0) bcSetScale(BC.s * d / ref.dist, mid.x, mid.y);
+          ref = { mid, dist: d };
+        }
+        bcRedraw();
+      });
+      const up = (e) => { pts.delete(e.pointerId); resetRef(); };
+      cv.addEventListener('pointerup', up);
+      cv.addEventListener('pointercancel', up);
+      cv.addEventListener('wheel', (e) => {
+        if (!BC.img) return;
+        e.preventDefault();
+        const p = pos(e);
+        bcSetScale(BC.s * Math.exp(-e.deltaY * 0.0015), p.x, p.y);
+        bcRedraw();
+      }, { passive: false });
+    })();
+
+        function showTab(name) {
       document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.tab === name));
       document.querySelectorAll('.panel').forEach(p => p.classList.toggle('on', p.id === 'panel-' + name));
     }
 
     applyNarrativePreset("3");
     renderLibraryUI();
+    setTransition(storyState.transition);
     initLanguage();
   </script>
 </body>
