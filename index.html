@@ -279,6 +279,8 @@
     .scene-dur{position:absolute;bottom:30px;left:4px;background:var(--blue);color:#fff;border-radius:10px;padding:1px 7px;font-size:.85rem;font-weight:700;z-index:3;font-variant-numeric:tabular-nums}
     .flow-arrow[title]{cursor:pointer}
     #export-bar,#export-time,#export-sub{display:none}
+    #export-overlay.movie .spinner{display:none}
+    #export-preview{display:block;width:min(440px,70vw);height:auto;aspect-ratio:760/427;border:4px solid #fff;border-radius:16px;background:#000}
     #export-overlay.movie{position:fixed;z-index:3000;gap:14px;padding:24px}
     #export-overlay.movie #export-bar{display:block;width:min(520px,80vw);height:18px;border-radius:12px;background:rgba(255,255,255,.18);overflow:hidden}
     #export-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--yellow),var(--orange));border-radius:12px;transition:width .25s linear}
@@ -2274,11 +2276,28 @@ function initLanguage() {
       });
     }
 
+    const _exScaled = new Map();
+    // copia ridotta di un'immagine (disegnarne una enorme a ogni fotogramma appesantisce molto l'iPad)
+    function exScaled(img, maxW, maxH) {
+      const iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height;
+      if (!iw || !ih) return img;
+      const k = Math.min(1, maxW / iw, maxH / ih);
+      if (k > 0.98) return img;
+      const key = maxW + 'x' + maxH;
+      let c = _exScaled.get(img);
+      if (c && c.__k === key) return c;
+      c = document.createElement('canvas');
+      c.width = Math.max(1, Math.round(iw * k)); c.height = Math.max(1, Math.round(ih * k));
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      c.__k = key;
+      _exScaled.set(img, c);
+      return c;
+    }
     function renderActFrame(c2, act, t) {
       c2.setTransform(1, 0, 0, 1, 0, 0);
       c2.clearRect(0, 0, SCENE_WIDTH, SCENE_HEIGHT);
       if (act.background) {
-        c2.drawImage(act.background, 0, 0, SCENE_WIDTH, SCENE_HEIGHT);
+        c2.drawImage(exScaled(act.background, SCENE_WIDTH, SCENE_HEIGHT), 0, 0, SCENE_WIDTH, SCENE_HEIGHT);
       } else {
         c2.fillStyle = '#3B3A6E';
         c2.fillRect(0, 0, SCENE_WIDTH, SCENE_HEIGHT);
@@ -2289,7 +2308,7 @@ function initLanguage() {
         c2.translate(s.x + s.w / 2, s.y + s.h / 2);
         c2.rotate(s.rot);
         if (s.flip) c2.scale(-1, 1);
-        c2.drawImage(c.img, -s.w / 2, -s.h / 2, s.w, s.h);
+        c2.drawImage(exScaled(c.img, 640, 640), -s.w / 2, -s.h / 2, s.w, s.h);
         c2.restore();
       });
     }
@@ -2352,7 +2371,7 @@ function initLanguage() {
 
       // l'audio va creato subito, mentre il tocco è ancora "fresco" (iPad)
       const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      let wake = null, hiddenWhile = false, timer = null, recorder = null, silenceOsc = null, result = null, phase = 'avvio', recErr = '';
+      let wake = null, hiddenWhile = false, timer = null, recorder = null, silenceOsc = null, result = null, phase = 'avvio', recErr = '', exportCanvasEl = null;
       const info = { audioFailed: [] };
       const onVis = () => { if (document.hidden) hiddenWhile = true; };
       document.addEventListener('visibilitychange', onVis);
@@ -2370,6 +2389,9 @@ function initLanguage() {
         exportCanvas.height = SCENE_HEIGHT;
         const expCtx = exportCanvas.getContext('2d');
         drawIntroFrame(expCtx, 1.0);
+        exportCanvas.id = 'export-preview';
+        exportCanvasEl = exportCanvas;
+        overlay.insertBefore(exportCanvas, statusText);
 
         const audioDest = audioCtx.createMediaStreamDestination();
         silenceOsc = audioCtx.createOscillator();
@@ -2456,6 +2478,8 @@ function initLanguage() {
         alert(T("Qualcosa è andato storto nel montaggio. Riprova!") + '\n\n[' + phase + '] ' + ((err && (err.name ? err.name + ': ' : '') + (err.message || '')) || String(err)) + (recErr ? ' / ' + recErr : ''));
       } finally {
         clearInterval(timer);
+        if (exportCanvasEl) exportCanvasEl.remove();
+        _exScaled.clear();
         document.removeEventListener('visibilitychange', onVis);
         try { if (wake) wake.release(); } catch (e) {}
         try { audioCtx.close(); } catch (e) {}
@@ -2540,8 +2564,12 @@ function initLanguage() {
 
       return new Promise((resolve) => {
         const startTime = performance.now();
+        let lastDraw = 0;
         function step() {
-          const elapsed = performance.now() - startTime;
+          const nowT = performance.now();
+          const elapsed = nowT - startTime;
+          if (elapsed < lenMs && nowT - lastDraw < 28) { requestAnimationFrame(step); return; }
+          lastDraw = nowT;
           renderActFrame(expCtx, act, Math.min(elapsed, lenMs));
           if (elapsed < lenMs) {
             requestAnimationFrame(step);
