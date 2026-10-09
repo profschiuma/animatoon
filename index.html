@@ -2133,13 +2133,16 @@ function initLanguage() {
       src.buffer = applauseBuffer(ac, dur);
       const dry = ac.createGain(); dry.gain.value = 0.9 * gain;
       const wet = ac.createGain(); wet.gain.value = 0.35 * gain;
-      const conv = ac.createConvolver(); conv.buffer = applauseIR(ac);
       src.connect(dry); dry.connect(dest);
-      src.connect(conv); conv.connect(wet); wet.connect(dest);
+      try {
+        const conv = ac.createConvolver(); conv.buffer = applauseIR(ac);
+        src.connect(conv); conv.connect(wet); wet.connect(dest);
+      } catch (e) { console.warn('eco non disponibile', e); }
       src.start(t);
     }
     function playProceduralApplause(audioCtx, destNode, durationSec = 8.5) {
-      playApplause(audioCtx, destNode, audioCtx.currentTime, durationSec, 1);
+      try { playApplause(audioCtx, destNode, audioCtx.currentTime, durationSec, 1); }
+      catch (e) { console.warn('applauso non disponibile', e); }
     }
 
     function drawIntroFrame(ctx, alpha = 1.0) {
@@ -2349,7 +2352,7 @@ function initLanguage() {
 
       // l'audio va creato subito, mentre il tocco è ancora "fresco" (iPad)
       const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      let wake = null, hiddenWhile = false, timer = null, recorder = null, silenceOsc = null, result = null;
+      let wake = null, hiddenWhile = false, timer = null, recorder = null, silenceOsc = null, result = null, phase = 'avvio', recErr = '';
       const info = { audioFailed: [] };
       const onVis = () => { if (document.hidden) hiddenWhile = true; };
       document.addEventListener('visibilitychange', onVis);
@@ -2382,11 +2385,20 @@ function initLanguage() {
           ...audioDest.stream.getAudioTracks()
         ]);
 
-        const mimeType = ['video/mp4; codecs="avc1.42E01E, mp4a.40.2"', 'video/mp4', 'video/webm; codecs=vp9,opus', 'video/webm; codecs=vp8,opus', 'video/webm']
-          .find(m => MediaRecorder.isTypeSupported(m)) || '';
-        const ext = mimeType.startsWith('video/mp4') ? 'mp4' : 'webm';
-
-        recorder = new MediaRecorder(combinedStream, mimeType ? { mimeType, videoBitsPerSecond: 4000000 } : { videoBitsPerSecond: 4000000 });
+        let mimeType = '';
+        const cands = ['video/mp4; codecs="avc1.42E01E, mp4a.40.2"', 'video/mp4', 'video/webm; codecs=vp9,opus', 'video/webm; codecs=vp8,opus', 'video/webm', ''];
+        for (const m of cands) {
+          try {
+            if (m && !MediaRecorder.isTypeSupported(m)) continue;
+            recorder = m ? new MediaRecorder(combinedStream, { mimeType: m }) : new MediaRecorder(combinedStream);
+            mimeType = m;
+            break;
+          } catch (e) { recorder = null; }
+        }
+        if (!recorder) throw new Error('registratore video non disponibile');
+        const ext = ((recorder.mimeType || mimeType || '').indexOf('mp4') >= 0) ? 'mp4' : 'webm';
+        recorder.onerror = (e) => { recErr = (e && e.error && (e.error.name + ' ' + e.error.message)) || 'errore'; };
+        phase = 'registratore';
         const videoChunks = [];
         recorder.ondataavailable = (e) => { if (e.data && e.data.size) videoChunks.push(e.data); };
         const recorderStarted = new Promise(resolve => { recorder.onstart = () => resolve(); });
@@ -2405,11 +2417,13 @@ function initLanguage() {
         }, 250);
 
         statusText.innerText = T("Creazione Titoli Iniziali...");
+        phase = 'titoli iniziali';
         await renderIntroScreen(expCtx, 3800);
 
         for (let i = 0; i < list.length; i++) {
           const act = list[i];
           statusText.innerText = T('Montaggio Scena {a} di {b}...', { a: i + 1, b: list.length });
+          phase = 'scena ' + (i + 1);
           const lenMs = await playActForExport(act, audioCtx, audioDest, expCtx, info);
           if (trMs && i < list.length - 1) {
             const fa = makeActFrameCanvas(act, lenMs);
@@ -2419,23 +2433,27 @@ function initLanguage() {
         }
 
         statusText.innerText = T("Titoli di Coda e Applausi...");
+        phase = 'titoli di coda';
         await renderOutroCreditsScreen(expCtx, audioCtx, audioDest, 8500);
 
         statusText.innerText = T("Salvataggio file completato!");
         await new Promise(r => setTimeout(r, 400));
-        try { recorder.requestData(); } catch (e) {}
-        const stopped = new Promise(res => { recorder.onstop = res; });
-        recorder.stop();
-        await stopped;
+        phase = 'salvataggio';
+        const gotStop = new Promise(res => { recorder.onstop = res; });
+        try { if (recorder.state !== 'inactive') recorder.stop(); } catch (e) { console.warn('stop', e); recErr = recErr || String(e && e.name); }
+        await Promise.race([gotStop, new Promise(r => setTimeout(r, 5000))]);
+        // alcuni browser mobili mandano gli ultimi dati dopo l'evento stop: aspettiamo che arrivino
+        for (let k = 0; k < 25 && videoChunks.length === 0; k++) await new Promise(r => setTimeout(r, 150));
+        await new Promise(r => setTimeout(r, 250));
         try { silenceOsc.stop(); } catch (e) {}
 
         const finalBlob = new Blob(videoChunks, { type: recorder.mimeType || mimeType || 'video/webm' });
-        if (finalBlob.size < 2000) throw new Error('film vuoto');
+        if (finalBlob.size === 0) throw new Error('nessun dato dal registratore (stato ' + recorder.state + ', pezzi ' + videoChunks.length + ')');
         result = { blob: finalBlob, ext, scenes: list.length, ms: performance.now() - t0 };
       } catch (err) {
         console.error(err);
         try { if (recorder && recorder.state !== 'inactive') { recorder.onstop = null; recorder.stop(); } } catch (e) {}
-        alert(T("Qualcosa è andato storto nel montaggio. Riprova!"));
+        alert(T("Qualcosa è andato storto nel montaggio. Riprova!") + '\n\n[' + phase + '] ' + ((err && (err.name ? err.name + ': ' : '') + (err.message || '')) || String(err)) + (recErr ? ' / ' + recErr : ''));
       } finally {
         clearInterval(timer);
         document.removeEventListener('visibilitychange', onVis);
