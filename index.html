@@ -225,6 +225,15 @@
     #credit-bar{flex-shrink:0;height:30px;display:flex;align-items:center;justify-content:center;gap:7px;background:#fff;border-top:2px solid var(--line);font-size:.85rem;font-weight:600;color:var(--muted)}
     #credit-bar .ico{filter:none;width:1rem;height:1rem;color:#EF4444;stroke-width:3}
     #credit-bar a{color:var(--blue-d);text-decoration:none;font-weight:700}
+    /* link "Per i grandi" (laboratorio del libro): visibile solo con l'app in italiano */
+    .lab-only{display:none}
+    body.lang-it .lab-only{display:inline}
+    #lab-link{background:none;border:0;padding:0;font:inherit;font-weight:700;color:var(--blue-d);cursor:pointer;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
+    #lab-modal .modal-box{max-width:480px}
+    #lab-modal p{margin:0;line-height:1.5}
+    #lab-hold{position:relative;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:none;-webkit-touch-callout:none;--p:0%}
+    #lab-hold::before{content:"";position:absolute;inset:0;width:var(--p);background:rgba(255,255,255,.35)}
+    #lab-hold span{position:relative}
 
     .btn-lib-edit{flex-shrink:0;min-height:46px;border:3px solid var(--cat);background:#fff;color:var(--cat-d);border-radius:14px;font-size:.95rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
     .btn-lib-edit .ico{width:1.3rem;height:1.3rem}
@@ -400,7 +409,7 @@
     <div class="flow-arrow"><svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></div>
     <div class="scene-add-card" onclick="openAddSceneModal()" title="Aggiungi una nuova scena">+</div>
   </footer>
-  <div id="credit-bar"><span>made with</span><svg class="ico" aria-hidden="true"><use href="#i-heart"/></svg><span>by Giuseppe Schiuma</span><span class="sep">·</span><a id="cc-link" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.it" target="_blank" rel="license noopener" title="Licenza Creative Commons Attribuzione - Non commerciale - Condividi allo stesso modo 4.0">CC BY-NC-SA 4.0</a></div>
+  <div id="credit-bar"><span>made with</span><svg class="ico" aria-hidden="true"><use href="#i-heart"/></svg><span>by Giuseppe Schiuma</span><span class="sep">·</span><a id="cc-link" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.it" target="_blank" rel="license noopener" title="Licenza Creative Commons Attribuzione - Non commerciale - Condividi allo stesso modo 4.0">CC BY-NC-SA 4.0</a><span class="sep lab-only">·</span><button id="lab-link" class="lab-only" type="button" onclick="openLabGate()">Per i grandi</button></div>
 
 
   <div id="bgcrop-modal" class="modal-overlay"><div class="modal-box" data-c="bg" style="max-width:880px">
@@ -490,6 +499,13 @@
     <div class="modal-actions"><button class="btn-primary" onclick="closeHelp()">Ho capito!</button></div>
   </div></div>
 
+  <div id="lab-modal" class="modal-overlay" onclick="if(event.target===this)closeLabGate()"><div class="modal-box" data-c="film" role="dialog" aria-modal="true" aria-labelledby="lab-title">
+    <h3 id="lab-title" style="color: var(--cat-d);">Per i grandi</h3>
+    <p>Schede da stampare, tutorial e consigli per insegnanti e famiglie: il laboratorio del libro <b>Scintilla e la magia del cinema</b>.</p>
+    <p>Si apre in una nuova scheda del browser e serve la parola magica stampata nel libro. Tieni premuto il pulsante per aprirlo.</p>
+    <div class="modal-actions"><button class="btn-secondary" type="button" onclick="closeLabGate()">Annulla</button><button id="lab-hold" class="btn-primary" type="button"><span>Tieni premuto</span></button></div>
+  </div></div>
+
   <div id="audio-rec-modal" class="modal-overlay"><div class="modal-box" data-c="music">
     <h3 style="color: var(--purple-d);"><svg class="ico" aria-hidden="true"><use href="#i-mic"/></svg> Registra l'audio</h3>
     <p class="ar-hint">Tocca il tasto rosso e parla, canta o suona</p>
@@ -562,6 +578,7 @@ function setLanguage(lang) {
   LANG = lang;
   try { localStorage.setItem('animatoon-lang', lang); } catch (e) {}
   document.documentElement.lang = lang;
+  document.body.classList.toggle('lang-it', lang === 'it');
   document.title = T('Animatoon - Storie in movimento');
   document.getElementById('lang-code').innerText = lang.toUpperCase();
   document.querySelectorAll('#lang-menu button').forEach(b => b.classList.toggle('on', b.dataset.lang === lang));
@@ -3400,6 +3417,36 @@ function initLanguage() {
     }
     function openHelp() { document.getElementById('help-modal').classList.add('active'); }
     function closeHelp() { document.getElementById('help-modal').classList.remove('active'); }
+
+    // Laboratorio del libro: link per gli adulti, protetto da una pressione lunga (1,5 s)
+    const LAB_URL = 'https://profschiuma.github.io/animatoon/laboratorio/';
+    function openLabGate() { document.getElementById('lab-modal').classList.add('active'); document.getElementById('lab-hold').focus(); }
+    function closeLabGate() { labHoldStop(); document.getElementById('lab-modal').classList.remove('active'); }
+    let labHoldTimer = null, labHoldStart = 0;
+    function labHoldStop() {
+      if (labHoldTimer) { cancelAnimationFrame(labHoldTimer); labHoldTimer = null; }
+      const b = document.getElementById('lab-hold'); if (b) b.style.setProperty('--p', '0%');
+    }
+    function labHoldBegin() {
+      if (labHoldTimer) return;
+      labHoldStart = performance.now();
+      const step = now => {
+        const p = Math.min(1, (now - labHoldStart) / 1500);
+        document.getElementById('lab-hold').style.setProperty('--p', (p * 100) + '%');
+        if (p >= 1) { labHoldTimer = null; labHoldStop(); closeLabGate(); window.open(LAB_URL, '_blank', 'noopener'); return; }
+        labHoldTimer = requestAnimationFrame(step);
+      };
+      labHoldTimer = requestAnimationFrame(step);
+    }
+    (function () {
+      const b = document.getElementById('lab-hold');
+      b.addEventListener('pointerdown', e => { e.preventDefault(); labHoldBegin(); });
+      ['pointerup', 'pointerleave', 'pointercancel'].forEach(t => b.addEventListener(t, labHoldStop));
+      b.addEventListener('contextmenu', e => e.preventDefault());
+      b.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) { e.preventDefault(); labHoldBegin(); } });
+      b.addEventListener('keyup', labHoldStop);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.getElementById('lab-modal').classList.contains('active')) closeLabGate(); });
+    })();
 
     
     /* ===== ELIMINA DALLA LIBRERIA + SCHERMO INTERO ===== */
