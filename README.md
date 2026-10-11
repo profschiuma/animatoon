@@ -7,14 +7,13 @@ Tutto funziona **in un solo file HTML, nel browser, senza server e senza account
 - Autore: Giuseppe Schiuma
 - Licenza: [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.it) (indicata nella barra dei crediti dell'app)
 - Lingue dell'interfaccia: italiano, inglese, francese, spagnolo, tedesco
-- Stato: 10 ottobre 2026 (versione file «14»)
+- Stato: 10 ottobre 2026 (versione file «15»)
 
 ## File
 
 | File | Contenuto |
 | --- | --- |
 | `index_fase3_kids.html` | Versione con icone piatte (~300 KB) |
-| `index_fase3_kids_3d.html` | Versione con icone 3D (~300 KB): stessa logica, in più i filtri CSS e il logo 3D |
 
 Per usarla basta aprire il file in un browser. Nessuna installazione.
 
@@ -24,7 +23,8 @@ Per usarla basta aprire il file in un browser. Nessuna installazione.
 2. **Crea i personaggi** – fotografa un disegno e ritaglialo col dito (a puntini o a mano libera, con la lente): diventa un personaggio.
 3. **Metti in scena** – tocca un personaggio per portarlo sul palco; trascinalo, ruotalo e ingrandiscilo con i cerchi arancioni. Fuori dal riquadro giallo è «dietro le quinte».
 4. **Aggiungi la musica** – da un file o registrata con il microfono.
-5. **Registra la scena** – premi Registra, racconta con la voce e muovi i personaggi. Mentre registri si possono toccare i bottoni rosa degli **effetti sonori** (boing, clap, applausi, pop, ding, whoosh, passi, tuono).
+5. **Registra la scena** – premi Registra: compare il **conto alla rovescia 3‑2‑1‑Via!** (con un segnale sonoro; un tocco lo annulla) e poi si racconta con la voce muovendo i personaggi. Si può premere **Pausa** per fermarsi un momento, sistemare i personaggi e poi **Continua**: il tempo in pausa non entra nel film. Mentre registri si possono toccare i bottoni rosa degli **effetti sonori** (boing, clap, applausi, pop, ding, whoosh, passi, tuono).
+   - **Il rumorista:** il bottone tratteggiato «Rumorista» nella barra rosa permette di registrare **rumori propri** (fino a 6 secondi: una porta che cigola, un passo, un fischio…). Il silenzio iniziale e finale viene tolto e il volume regolato; il suono compare tra gli effetti, si usa mentre si registra, finisce nel film e viene salvato nel file `.animatoon`. Dalla stessa finestra si possono riascoltare ed eliminare i suoni.
 6. **Costruisci la storia** – in basso si aggiungono altre scene con il +; si trascinano per cambiare l'ordine. Si può partire da una traccia narrativa in 3 o 5 parti.
 7. **Passaggi tra le scene** – la freccia tra due scene permette di scegliere: nessuno, dissolvenza o scorrimento.
 8. **Crea il film** – «Salva il film»: titoli di testa, scene, titoli di coda e applauso finale.
@@ -52,6 +52,7 @@ I dettagli tecnici dell'esportazione non sono mostrati ai bambini: restano nella
 ## Per chi modifica il codice
 
 - Struttura: stage 1040×527 (PAD_X=140, PAD_Y=50), scena 760×427; stato in `storyState`, `projectLibrary`, `projectCredits`; testi in `I18N` (`[it,en,fr,es,de]`) con `T()` e `translateStatic()`.
+- Registrazione: `toggleRecord` (conto alla rovescia `runCountdown`, `recGate` = nulla si registra durante conto e pausa), `togglePauseRecord`, `recClock()` (tempo senza pause), `fixPausedAudio` (taglia le pause se il registratore le ha tenute). Rumorista: `projectLibrary.sounds` (id `cs_…`), `processFoley`, `renderCustomSounds`, `playSfx` (gestisce anche i suoni propri), WAV con `pcmWav`.
 - Esportazione: `pickFilmConfig`, `exportFilm`, `filmEncodeAac`, `filmFixAsc`, `filmVerify`, `filmProbeAudio`, `filmMuxAudioOnly`, `filmWav`, `MP4.mux` (muxer scritto a mano), `filmMuxLib` (**mp4-muxer 5.2.2**, MIT, incluso nel file).
 - Ordine dei tentativi audio: `aacL` → `aac` → `pcm`.
 - Parametri di debug (innocui): `window.__noFilm`, `__filmSkipVerify`, `__filmKinds`, `__filmProbe`.
