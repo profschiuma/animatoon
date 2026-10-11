@@ -13,7 +13,7 @@ Tutto funziona **in un solo file HTML, nel browser, senza server e senza account
 
 | File | Contenuto |
 | --- | --- |
-| `index_fase3_kids.html` | Versione con icone piatte (~300 KB) |
+| `index.html` | Versione con icone piatte (~300 KB) |
 
 Per usarla basta aprire il file in un browser. Nessuna installazione.
 
