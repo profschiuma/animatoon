@@ -1545,6 +1545,15 @@ I18N.push(...[["Scegli come è fatto il tuo personaggio", "Choose what your char
 ["Stampa la scheda, poi colora i pezzi!", "Print the sheet, then colour the pieces!", "Imprime la fiche, puis colorie les pièces !", "¡Imprime la ficha y luego colorea las piezas!", "Drucke das Blatt aus und male die Teile an!"],
 ["Inquadra tutta la scheda: si devono vedere i 4 quadratini neri", "Frame the whole sheet: the 4 black squares must show", "Cadre toute la fiche : les 4 carrés noirs doivent se voir", "Encuadra toda la ficha: se deben ver los 4 cuadrados negros", "Das ganze Blatt aufnehmen: die 4 schwarzen Quadrate müssen sichtbar sein"]]);
 const LANG_IDX = { it: 0, en: 1, fr: 2, es: 3, de: 4 };
+I18N.push(...[
+["Il lavoro è pronto", "Your work is ready", "Ton travail est prêt", "Tu trabajo está listo", "Dein Werk ist fertig"],
+["Il personaggio è pronto", "Your character is ready", "Ton personnage est prêt", "Tu personaje está listo", "Deine Figur ist fertig"],
+["Scegli dove salvarlo", "Choose where to save it", "Choisis où l’enregistrer", "Elige dónde guardarlo", "Wähle, wo es gespeichert wird"],
+["Il salvataggio non finisce. Riprova.", "Saving is taking too long. Try again.", "L’enregistrement n’en finit pas. Réessaie.", "El guardado no termina. Inténtalo otra vez.", "Das Speichern dauert zu lange. Versuch es noch einmal."],
+["La fotocamera è bloccata per questo sito. Nelle impostazioni del browser (o di iPad) consenti la fotocamera, poi ricarica la pagina.", "The camera is blocked for this site. In the browser (or iPad) settings allow the camera, then reload the page.", "La caméra est bloquée pour ce site. Dans les réglages du navigateur (ou de l’iPad), autorise la caméra, puis recharge la page.", "La cámara está bloqueada para este sitio. En los ajustes del navegador (o del iPad) permite la cámara y recarga la página.", "Die Kamera ist für diese Seite gesperrt. Erlaube sie in den Einstellungen des Browsers (oder des iPads) und lade die Seite neu."],
+["La fotocamera è usata da un’altra app o scheda. Chiudila e riprova.", "The camera is being used by another app or tab. Close it and try again.", "La caméra est utilisée par une autre appli ou un autre onglet. Ferme-la et réessaie.", "Otra app o pestaña está usando la cámara. Ciérrala e inténtalo otra vez.", "Die Kamera wird von einer anderen App oder einem anderen Tab benutzt. Schließ sie und versuch es noch einmal."],
+["Non trovo nessuna fotocamera.", "I can’t find a camera.", "Je ne trouve aucune caméra.", "No encuentro ninguna cámara.", "Ich finde keine Kamera."]
+]);
 const I18N_MAP = new Map(I18N.map(r => [r[0], r]));
 let LANG = 'it';
 function T(it, vars) {
@@ -6041,7 +6050,7 @@ var MAG = (function () {
       return nodes;
     }
     function libSnDown(xy) {
-      const t = E.vt || pedFit(); let best = null, bd = 38 * 38;
+      const t = E.vt || pedFit(); let best = null, bd = (38 * pedMarkK()) ** 2;
       libNodes().forEach(n => { const d = (xy[0] - (t.ox + n.pt[0] * t.s)) ** 2 + (xy[1] - (t.oy + n.pt[1] * t.s)) ** 2; if (d <= bd) { bd = d; best = n; } });
       if (best) { E.sundo.push(libSnapNow()); if (E.sundo.length > 20) E.sundo.shift(); E.drag = { kind: 'lsn', key: best.key, id: best.id, moved: false }; (E.mv = E.mv || {})[best.key] = 1; libSnBtn(); }
       pedDraw();
@@ -6280,7 +6289,7 @@ var MAG = (function () {
         (E.limbs || []).forEach(L => {            // il cerchio: qui si può ritoccare
           if (L.fam !== fam) return; const o = libPart(L.root).pivot, R = libJR(L) * t.s, X = t.ox + o[0] * t.s, Y = t.oy + o[1] * t.s;
           x.save(); x.setLineDash([9, 7]); x.lineWidth = 3.5; x.strokeStyle = '#fff'; x.beginPath(); x.arc(X, Y, R, 0, 7); x.stroke(); x.lineWidth = 2; x.strokeStyle = '#27264A'; x.stroke(); x.restore();
-          x.beginPath(); x.arc(X, Y, 8, 0, 7); x.fillStyle = '#FF8A1F'; x.fill(); x.lineWidth = 3; x.strokeStyle = '#fff'; x.stroke();
+          x.beginPath(); x.arc(X, Y, 8 * pedMarkK(), 0, 7); x.fillStyle = '#FF8A1F'; x.fill(); x.lineWidth = 3 * pedMarkK(); x.strokeStyle = '#fff'; x.stroke();
         });
         const cv = pedEl('ped-cv'), r = Math.max(2, E.lsize * pedSpan()) * t.s, dr = E.drag && E.drag.kind === 'lzn'; let er = dr ? E.drag.erase : !!E.lzerase, rc = libRGB(er ? LIB_BODYCOL : zc), cl = (dr && E.drag.clean) || (!dr && E.lclean && typeof LIB_CLEAN !== 'undefined'); if (cl) rc = '#E5484D';
         if (dr && E.drag.clean) { x.save(); x.fillStyle = 'rgba(229,72,77,.45)'; x.beginPath(); E.drag.st.forEach(q => { const cx = t.ox + q[0] * t.s, cy = t.oy + q[1] * t.s; x.moveTo(cx + r, cy); x.arc(cx, cy, r, 0, 7); }); x.fill(); x.restore(); }
@@ -6293,22 +6302,22 @@ var MAG = (function () {
       x.lineCap = 'round';
       nodes.forEach(n => {
         if (!n.par) return; const a = P(n), pn = n.par === 'navel' ? nv : by[n.par]; if (!pn) return; const b = P(pn);
-        x.beginPath(); x.moveTo(a[0], a[1]); x.lineTo(b[0], b[1]); x.strokeStyle = '#fff'; x.lineWidth = 9; x.stroke(); x.strokeStyle = '#27264A'; x.lineWidth = 3.5; x.stroke();
+        const K0 = pedMarkK(); x.beginPath(); x.moveTo(a[0], a[1]); x.lineTo(b[0], b[1]); x.strokeStyle = '#fff'; x.lineWidth = 9 * K0; x.stroke(); x.strokeStyle = '#27264A'; x.lineWidth = 3.5 * K0; x.stroke();
       });
       if (E.quad) libLegRoots().forEach((r, i) => {          // numero su ogni zampa: scuro = sullo sfondo
         const ch = libChain(r), q = ch[ch.length - 1], c = q && q._cen; if (!c) return; const X = t.ox + c[0] * t.s, Y = t.oy + c[1] * t.s;
         x.beginPath(); x.arc(X, Y, 15, 0, 7); x.fillStyle = r.back ? '#27264A' : '#fff'; x.fill(); x.lineWidth = 3; x.strokeStyle = r.back ? '#fff' : '#27264A'; x.stroke();
         x.fillStyle = r.back ? '#fff' : '#27264A'; x.font = '700 16px system-ui,sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(String(i + 1), X, Y + 1);
       });
-      const pulse = E.lhl && pedRingNow();
+      const pulse = E.lhl && pedRingNow(), K = pedMarkK();
       nodes.forEach(n => {
         if (n.key === 'navel') return; const p = P(n), hot = E.lhl === n.key || (E.drag && E.drag.id === n.id);
-        x.beginPath(); x.arc(p[0], p[1], hot ? 17 : 13, 0, 7); x.fillStyle = libRGB(n.col); x.fill(); x.lineWidth = 4; x.strokeStyle = '#fff'; x.stroke();
-        if (pulse && E.lhl === n.key) { x.beginPath(); x.arc(p[0], p[1], 24, 0, 7); x.lineWidth = 3; x.strokeStyle = libRGB(n.col); x.stroke(); }
+        x.beginPath(); x.arc(p[0], p[1], (hot ? 17 : 13) * K, 0, 7); x.fillStyle = libRGB(n.col); x.fill(); x.lineWidth = 4 * K; x.strokeStyle = '#fff'; x.stroke();
+        if (pulse && E.lhl === n.key) { x.beginPath(); x.arc(p[0], p[1], 24 * K, 0, 7); x.lineWidth = 3 * K; x.strokeStyle = libRGB(n.col); x.stroke(); }
       });
-      { const p = P(nv), R = (E.drag && E.drag.key === 'navel') || E.lhl === 'navel' ? 22 : 18;
-        x.beginPath(); x.arc(p[0], p[1], R, 0, 7); x.fillStyle = '#FF8A1F'; x.fill(); x.lineWidth = 4; x.strokeStyle = '#fff'; x.stroke();
-        x.beginPath(); x.moveTo(p[0] - 1, p[1]); x.arc(p[0] + 1.5, p[1], 2.5, Math.PI, 0); x.arc(p[0] + 1.5, p[1], 5, 0, Math.PI); x.arc(p[0] + 4, p[1], 8, Math.PI, 0); x.strokeStyle = '#fff'; x.lineWidth = 2.6; x.stroke(); }
+      { const p = P(nv), R = ((E.drag && E.drag.key === 'navel') || E.lhl === 'navel' ? 22 : 18) * K;
+        x.beginPath(); x.arc(p[0], p[1], R, 0, 7); x.fillStyle = '#FF8A1F'; x.fill(); x.lineWidth = 4 * K; x.strokeStyle = '#fff'; x.stroke();
+        x.save(); x.translate(p[0], p[1]); x.scale(K, K); x.beginPath(); x.moveTo(-1, 0); x.arc(1.5, 0, 2.5, Math.PI, 0); x.arc(1.5, 0, 5, 0, Math.PI); x.arc(4, 0, 8, Math.PI, 0); x.strokeStyle = '#fff'; x.lineWidth = 2.6; x.stroke(); x.restore(); }
     }
     // ---- sul disegno: due pallini (annulla · da capo), in alto a sinistra ----
     function libCbs() {
@@ -8191,6 +8200,10 @@ var MAG = (function () {
       pedCursor();
       if (E.step === 1 && E.prev && E.tool === 'fill' && E.dropper) { const lab = T('Contagocce'); x.font = '800 15px system-ui,sans-serif'; const w = x.measureText(lab).width + 22, X = cv.clientWidth - w - 10; x.fillStyle = '#F7B500'; x.beginPath(); x.roundRect ? x.roundRect(X, 10, w, 30, 15) : x.rect(X, 10, w, 30); x.fill(); x.fillStyle = '#27264A'; x.fillText(lab, X + 11, 30); }
     }
+    function pedMarkK() {           // segnaposto delle articolazioni: restano di grandezza simile sullo schermo (e un po' più piccoli) quando la vista è ingrandita
+      let z = 1; try { z = (window.pedViewZoom && window.pedViewZoom()) || 1; } catch (e) {}
+      return z <= 1.02 ? 1 : (1 / z) * Math.max(0.7, 1 - 0.1 * (z - 1));
+    }
     function pedDrawEdit(x) {
       const t = pedFit(); E.vt = t;
       if (E.step === 1 && E.prev && E.pose) { pedDrawPose(x); return; }
@@ -8216,18 +8229,18 @@ var MAG = (function () {
         x.fillStyle = 'rgba(39,38,74,.82)'; x.beginPath(); x.roundRect ? x.roundRect(10, 10, w, 30, 15) : x.rect(10, 10, w, 30); x.fill(); x.fillStyle = '#fff'; x.fillText(lab, 21, 30);
       }
       if (E.step === 2) {
-        const bp = E.bodyPivot || E.centroid;
+        const bp = E.bodyPivot || E.centroid, K = pedMarkK();
         E.parts.forEach(p => {
           const par = p.parent === 'body' ? null : E.parts.find(q => q.id === p.parent), to = par ? par.pivot : bp;
           x.beginPath(); x.moveTo(t.ox + p.pivot[0] * t.s, t.oy + p.pivot[1] * t.s); x.lineTo(t.ox + to[0] * t.s, t.oy + to[1] * t.s);
-          x.strokeStyle = 'rgba(39,38,74,.55)'; x.lineWidth = 2; x.setLineDash([4, 4]); x.stroke(); x.setLineDash([]);
+          x.strokeStyle = 'rgba(39,38,74,.55)'; x.lineWidth = 2 * K; x.setLineDash([4 * K, 4 * K]); x.stroke(); x.setLineDash([]);
         });
-        x.fillStyle = '#27264A'; x.strokeStyle = '#fff'; x.lineWidth = 3;
-        x.beginPath(); x.rect(t.ox + bp[0] * t.s - 12, t.oy + bp[1] * t.s - 12, 24, 24); x.fill(); x.stroke();
+        x.fillStyle = '#27264A'; x.strokeStyle = '#fff'; x.lineWidth = 3 * K;
+        x.beginPath(); x.rect(t.ox + bp[0] * t.s - 12 * K, t.oy + bp[1] * t.s - 12 * K, 24 * K, 24 * K); x.fill(); x.stroke();
         E.parts.forEach(p => {
           const col = PED_COL[p.ci % PED_COL.length], X = t.ox + p.pivot[0] * t.s, Y = t.oy + p.pivot[1] * t.s, sel = E.sel === p.id;
-          x.beginPath(); x.arc(X, Y, sel ? 15 : 12, 0, 7); x.fillStyle = col; x.fill(); x.lineWidth = 3.5; x.strokeStyle = '#fff'; x.stroke();
-          if (sel) { x.beginPath(); x.arc(X, Y, 20, 0, 7); x.lineWidth = 2.5; x.strokeStyle = col; x.stroke(); }
+          x.beginPath(); x.arc(X, Y, (sel ? 15 : 12) * K, 0, 7); x.fillStyle = col; x.fill(); x.lineWidth = 3.5 * K; x.strokeStyle = '#fff'; x.stroke();
+          if (sel) { x.beginPath(); x.arc(X, Y, 20 * K, 0, 7); x.lineWidth = 2.5 * K; x.strokeStyle = col; x.stroke(); }
         });
       }
       if (E.drag && E.drag.kind === 'lasso') {
@@ -8464,7 +8477,7 @@ var MAG = (function () {
       else if (E.step === 1 && E.tool && E.prev) pedFixBegin(pedImgPt(xy));
       else if (E.step === 1) { if (E.prev && !E.drawTrunk) { E.prev = false; E.pose = false; E.tool = null; E.dropper = false; pedSide(); pedDraw(); } E.drag = { kind: 'lasso', pts: [pedImgPt(xy)], css: [xy], len: 0 }; }
       else if (E.step === 2) {
-        const t = E.vt || pedFit(); let best = null, bd = 34 * 34;
+        const t = E.vt || pedFit(); let best = null, bd = (34 * pedMarkK()) ** 2;
         const bp = E.bodyPivot || E.centroid;
         const bxy = [t.ox + bp[0] * t.s, t.oy + bp[1] * t.s]; { const d = (xy[0] - bxy[0]) ** 2 + (xy[1] - bxy[1]) ** 2; if (d < bd) { bd = d; best = { kind: 'body' }; } }
         E.parts.forEach(p => { const d = (xy[0] - (t.ox + p.pivot[0] * t.s)) ** 2 + (xy[1] - (t.oy + p.pivot[1] * t.s)) ** 2; if (d <= bd) { bd = d; best = { kind: 'pivot', id: p.id }; } });
@@ -8698,9 +8711,10 @@ var MAG = (function () {
         const data = { app: 'Animatoon', kind: 'character', version: 1, savedAt: new Date().toISOString(),
           character: { id: def.id, name: def.name, aspect: def.aspect, img: imgToDataURL(def.img, 800, false), prop: def.prop || undefined, frames: def.frames ? def.frames.map(f => imgToDataURL(f, 800, false)) : undefined, fps: def.frames ? def.fps : undefined, fmode: def.frames ? def.fmode : undefined, puppet: def.puppet ? def.puppet.spec : undefined } };
         const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+        let delivered = true;
         if (handle) { const w = await handle.createWritable(); await w.write(blob); await w.close(); }
-        else { const url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = fileName; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 5000); }
-        toast(T('Personaggio salvato!'));
+        else delivered = await animatoonDeliver(blob, fileName, 'Il personaggio è pronto');
+        if (delivered) toast(T('Personaggio salvato!'));
       } catch (err) { console.error(err); alert(T('Non riesco a salvare il personaggio. Riprova!')); }
     }
     function clSaveBtn(card, def) {
@@ -9804,15 +9818,30 @@ var MAG = (function () {
       camModal.dataset.t = targetType;
       document.getElementById('btn-shoot').className = 'btn-primary ' + (targetType === 'background' ? 'green' : 'orange');
 
-      try {
-        camStream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: { ideal: "environment" }, width: { ideal: 1280 }, height: { ideal: 720 } },
-          audio: false
-        });
-        camVideo.srcObject = camStream;
+      if (camStream) { camStream.getTracks().forEach(t => t.stop()); camStream = null; }
+      const tries = [
+        { video: { facingMode: { ideal: "environment" }, width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false },
+        { video: { facingMode: { ideal: "environment" } }, audio: false },
+        { video: true, audio: false }
+      ];
+      let lastErr = null;
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) lastErr = { name: 'NoMediaDevices' };
+      else for (const c of tries) {
+        try { camStream = await navigator.mediaDevices.getUserMedia(c); lastErr = null; break; }
+        catch (err) { lastErr = err; if (err && (err.name === 'NotAllowedError' || err.name === 'SecurityError')) break; }   // permesso negato: inutile riprovare
+      }
+      if (camStream) {
+        camVideo.srcObject = camStream; camVideo.muted = true;
+        try { const pr = camVideo.play(); if (pr && pr.catch) pr.catch(() => {}); } catch (e) {}
         camModal.classList.add('active');
-      } catch (err) {
-        alert(T("La fotocamera non parte. Controlla di aver dato il permesso!"));
+      } else {
+        console.warn('fotocamera', lastErr);
+        const n = (lastErr && lastErr.name) || '';
+        const msg = (n === 'NotAllowedError' || n === 'SecurityError') ? 'La fotocamera è bloccata per questo sito. Nelle impostazioni del browser (o di iPad) consenti la fotocamera, poi ricarica la pagina.'
+          : (n === 'NotReadableError' || n === 'AbortError' || n === 'TrackStartError') ? 'La fotocamera è usata da un’altra app o scheda. Chiudila e riprova.'
+          : (n === 'NotFoundError' || n === 'DevicesNotFoundError') ? 'Non trovo nessuna fotocamera.'
+          : 'La fotocamera non parte. Controlla di aver dato il permesso!';
+        alert(T(msg) + (n ? '  (' + n + ')' : ''));
       }
     }
 
@@ -11421,6 +11450,41 @@ var MAG = (function () {
       return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; });
     }
 
+    /* ---- consegna del file salvato (iPad/Safari: foglio di condivisione; altrove: scarico) ---- */
+    function animatoonIOS() { return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); }
+    function animatoonDownload(blob, fileName) {
+      const safari = /^((?!chrome|android|crios|fxios).)*safari/i.test(navigator.userAgent);
+      const b2 = (animatoonIOS() || safari) ? new Blob([blob], { type: 'application/octet-stream' }) : blob;   // con «json» Safari aggiunge .json al nome
+      const url = URL.createObjectURL(b2), a = document.createElement('a'); a.href = url; a.download = fileName;
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 8000);
+    }
+    function animatoonDeliver(blob, fileName, title) {
+      clearTimeout(window.__saveWd); try { setBusy(false); } catch (e) {}
+      if (!animatoonIOS() || !navigator.share || !navigator.canShare) { animatoonDownload(blob, fileName); return Promise.resolve(true); }
+      return new Promise(resolve => {
+        const ov = document.createElement('div');
+        ov.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(39,38,74,.55);display:flex;align-items:center;justify-content:center;padding:20px';
+        const bx = document.createElement('div');
+        bx.style.cssText = 'background:#fff;border-radius:24px;padding:24px 26px;max-width:420px;width:100%;text-align:center;font-family:inherit;color:#27264A;box-shadow:0 10px 40px rgba(0,0,0,.35)';
+        const h = document.createElement('div'); h.style.cssText = 'font-size:1.35rem;font-weight:800;margin-bottom:6px'; h.textContent = T(title);
+        const n = document.createElement('div'); n.style.cssText = 'font-size:1rem;color:#5B5A7C;margin-bottom:18px;word-break:break-all'; n.textContent = fileName;
+        const go = document.createElement('button'); go.type = 'button'; go.className = 'btn-primary'; go.style.cssText = 'width:100%;min-height:60px;font-size:1.2rem;border-radius:20px'; go.textContent = T('Scegli dove salvarlo');
+        const no = document.createElement('button'); no.type = 'button'; no.className = 'btn-secondary'; no.style.cssText = 'width:100%;min-height:52px;margin-top:10px;border-radius:18px'; no.textContent = T('Annulla');
+        bx.appendChild(h); bx.appendChild(n); bx.appendChild(go); bx.appendChild(no); ov.appendChild(bx); document.body.appendChild(ov);
+        const close = ok => { ov.remove(); resolve(ok); };
+        no.onclick = () => close(false);
+        go.onclick = async () => {
+          let file = null;
+          for (const ty of ['application/octet-stream', 'application/json']) {
+            try { const f = new File([blob], fileName, { type: ty }); if (navigator.canShare({ files: [f] })) { file = f; break; } } catch (e) {}
+          }
+          if (!file) { animatoonDownload(blob, fileName); close(true); return; }
+          try { await navigator.share({ files: [file] }); close(true); }
+          catch (err) { if (err && err.name === 'AbortError') return; animatoonDownload(blob, fileName); close(true); }      // annullato: la finestra resta, si può riprovare
+        };
+      });
+    }
+
     async function saveProject() {
       if (isRecording || isPreviewPlaying) return;
       const base = (projectCredits.title || 'Animatoon').replace(/[^\p{L}\p{N}]+/gu, '_').replace(/^_+|_+$/g, '').slice(0, 40) || 'Animatoon';
@@ -11433,6 +11497,7 @@ var MAG = (function () {
         } catch (e) { if (e && e.name === 'AbortError') return; handle = null; }
       }
       setBusy(true, T('Sto salvando il lavoro...'));
+      window.__saveWd = setTimeout(() => { setBusy(false); alert(T('Il salvataggio non finisce. Riprova.')); }, 90000);
       try {
         await new Promise(r => setTimeout(r, 60));
         const bgs = projectLibrary.backgrounds.slice();
@@ -11464,20 +11529,18 @@ var MAG = (function () {
           }))
         };
         const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+        let delivered = true;
         if (handle) {
           const w = await handle.createWritable(); await w.write(blob); await w.close();
         } else {
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a'); a.href = url; a.download = fileName;
-          document.body.appendChild(a); a.click(); a.remove();
-          setTimeout(() => URL.revokeObjectURL(url), 5000);
+          delivered = await animatoonDeliver(blob, fileName, 'Il lavoro è pronto');
         }
-        toast(T('Lavoro salvato!'));
+        if (delivered) toast(T('Lavoro salvato!'));
       } catch (err) {
         console.error(err);
         alert(T('Non riesco a salvare il lavoro. Riprova!'));
       } finally {
-        setBusy(false);
+        clearTimeout(window.__saveWd); setBusy(false);
       }
     }
 
@@ -12371,7 +12434,8 @@ var MAG = (function () {
   try {
     const host = document.getElementById('ped-stage'), cv = document.getElementById('ped-cv');
     const want = () => { try { return !!(E && (E.step === 1 || E.step === 2 || E.step === 5 || (E.lib && (E.step === 6 || E.step === 7)))); } catch (e) { return false; } };
-    const Z = makeZoom(host, cv, null, want);
+    let zRaf = 0;
+    const Z = makeZoom(host, cv, () => { if (zRaf) return; zRaf = requestAnimationFrame(() => { zRaf = 0; try { if (E && (E.step === 2 || E.step === 6)) pedDraw(); } catch (e) {} }); }, want);
     Z.show(false);
     window.pedViewZoom = () => Z.o.z;
     window.pedZoomFocus = (px, py, z) => Z.focus(px, py, z);      // px, py: punto da portare al centro, in pixel del disegno sullo schermo rispetto al centro
@@ -12416,4 +12480,21 @@ var MAG = (function () {
     host.addEventListener('wheel', () => { const p = ptr.get(st.id1); if (p) fake(p); });
     // il pulsante di zoom compare solo nei passi in cui si ritaglia o si colora; cambiando passo si torna a vista intera
     let last = null;
-    function sync() { try { const st0 = E ? E.
+    function sync() { try { const st0 = E ? E.step : null; if (st0 !== last) { last = st0; Z.reset(); } Z.show(want()); } catch (e) {} }
+    const ps = window.pedSide; if (typeof ps === 'function') window.pedSide = function () { const r = ps.apply(this, arguments); sync(); return r; };
+    setInterval(sync, 600);
+  } catch (e) {}
+})();
+</script>
+<script>
+/* iPad/iPhone: niente filtro sul tipo di file per .animatoon e .personaggio (altrimenti i file restano in grigio) */
+(function () {
+  try {
+    const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    if (!ios) return;
+    document.querySelectorAll('input[type=file]').forEach(i => { if (/animatoon|personaggio|storystudio/.test(i.getAttribute('accept') || '')) i.removeAttribute('accept'); });
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>
