@@ -6570,7 +6570,7 @@ var MAG = (function () {
       const pt = pedImgPt(xy), add = !E.cerase;
       if (!add && !E.cutM) return;          // niente da cancellare
       E.cundo.push(E.cutM ? E.cutM.slice() : null); if (E.cundo.length > 12) E.cundo.shift();
-      if (!E.cutM) { E.cutM = new Uint8Array(E.W * E.H); E._cutCv = null; if (!E.bgTol) E.bgTol = 55; }
+      if (!E.cutM) { E.cutM = new Uint8Array(E.W * E.H); E._cutCv = null; if (!E.bgTol && !E.bgUser) E.bgTol = 55; }      // se la persona ha tolto «Via lo sfondo» resta tolto
       E.drag = { kind: 'cut', add: add, last: pt, pt: pt };
       libCutStamp(pt, add); libCutFlush(); pedDraw();
     }
@@ -7030,7 +7030,7 @@ var MAG = (function () {
     function pedBgSlider() {
       const bw = pedMk('div', 'ped-segw'), bl = pedMk('div', 'ped-segl'); bl.textContent = T('Via lo sfondo'); bw.appendChild(bl);
       const rg = pedMk('input'); rg.type = 'range'; rg.min = 0; rg.max = 140; rg.step = 5; rg.value = E.bgTol; rg.className = 'ped-range';
-      rg.oninput = () => { E.bgTol = +rg.value; pedApplyBg(); E.parts.forEach(p => { delete p._m; delete p._cov; }); E.pp = null; pedDraw(); };
+      rg.oninput = () => { E.bgTol = +rg.value; E.bgUser = true; pedApplyBg(); E.parts.forEach(p => { delete p._m; delete p._cov; }); E.pp = null; pedDraw(); };
       rg.onchange = () => { pedAutoParents(E); pedSyncClones(E); E.pp = null; pedSide(); pedDraw(); };
       bw.appendChild(rg); bw.appendChild(pedHint(T('Più a destra toglie più sfondo attorno al disegno.'))); return bw;
     }
@@ -7222,7 +7222,7 @@ var MAG = (function () {
       if (E.paper && !E.noBg) {
         const bw = pedMk('div', 'ped-segw'), bl = pedMk('div', 'ped-segl'); bl.textContent = T('Via lo sfondo'); bw.appendChild(bl);
         const rg = pedMk('input'); rg.type = 'range'; rg.min = 0; rg.max = 140; rg.step = 5; rg.value = E.bgTol; rg.className = 'ped-range';
-        rg.oninput = () => { E.bgTol = +rg.value; pedApplyBg(); E.pp = null; pedDraw(); };
+        rg.oninput = () => { E.bgTol = +rg.value; E.bgUser = true; pedApplyBg(); E.pp = null; pedDraw(); };
         bw.appendChild(rg); box.appendChild(bw);
       }
       s.appendChild(box);
@@ -8132,7 +8132,7 @@ var MAG = (function () {
       if (E.paper && !E.noBg) {
         const bw = pedMk('div', 'ped-segw'), bl = pedMk('div', 'ped-segl'); bl.textContent = T('Via lo sfondo'); bw.appendChild(bl);
         const rg = pedMk('input'); rg.type = 'range'; rg.min = 0; rg.max = 140; rg.step = 5; rg.value = E.bgTol; rg.className = 'ped-range';
-        rg.oninput = () => { E.bgTol = +rg.value; pedApplyBg(); E.pp = null; E.fixVer++; E.cOv = null; pedColChrome(); pedDraw(); };
+        rg.oninput = () => { E.bgTol = +rg.value; E.bgUser = true; pedApplyBg(); E.pp = null; E.fixVer++; E.cOv = null; pedColChrome(); pedDraw(); };
         bw.appendChild(rg); fd.appendChild(bw);
       }
       fd.open = !!E.cFixOpen; fd.ontoggle = () => { E.cFixOpen = fd.open; };
@@ -12339,6 +12339,7 @@ var MAG = (function () {
     function panBy(dx, dy) { if (o.z <= 1) return false; const a = o.tx, b = o.ty; o.tx += dx; o.ty += dy; clamp(); apply(); return a !== o.tx || b !== o.ty; }
     // spinta verso il bordo: se il dito è vicino al bordo della finestra, la vista scorre (restituisce true se si è mossa)
     function edge(pos) {
+      return false;      // scorrimento automatico ai bordi tolto: la vista si sposta con due dita o con la rotella
       if (o.z <= 1) return false;
       const r = host.getBoundingClientRect(), M = 80, V = 22; let vx = 0, vy = 0;
       const f = d => { const k = Math.max(0, Math.min(1, (M - d) / M)); return k * V; };
@@ -12491,10 +12492,4 @@ var MAG = (function () {
 (function () {
   try {
     const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    if (!ios) return;
-    document.querySelectorAll('input[type=file]').forEach(i => { if (/animatoon|personaggio|storystudio/.test(i.getAttribute('accept') || '')) i.removeAttribute('accept'); });
-  } catch (e) {}
-})();
-</script>
-</body>
-</html>
+    i
